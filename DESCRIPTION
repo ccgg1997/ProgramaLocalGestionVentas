@@ -1,0 +1,14 @@
+Introducción
+La empresa productos saludables es un emprendimiento Vallecaucano que comercializa alimentos precocidos tanto al mayor como al por menor, mediante personas que se encargan de realizar las ventas en los distintos comercios, por llamada al negocio o en sitio.
+En su proyecto de modernización, requiere  un grupo de desarrolladores para que ejecuten el proceso de construcción de la aplicación que gestionará la información del proceso.
+La empresa cuenta con todo su proceso de producción, desde la adquisición y manejo de materia prima, el proceso de producción de los productos, el inventario del producto terminado y la comercialización de los mismos.
+Para la adquisición de materia prima, se cuenta con diferentes proveedores a los que se les compra, cuya mercancía es inventariada al momento de llegar a la compañía. Se debe tener el control del inventario de materia prima, la cual se va utilizando en cada producción de los diferentes productos comestibles que se producen, tales como: Papa Rellenas, Empanadas, Pasteles de Carne, Pasteles de Pollo, Churros o dedos, Hojaldras, entre otros. Se debe contar con un proceso de trazabilidad entre la materia prima adquirida y utilizada en los diferentes lotes de producción.
+En cuanto a la comercialización de los productos, se cuentan con personas que recorren y venden en los diferentes establecimientos, tales como tiendas de barrio, supermercados, restaurantes, entre otros.  Se debe tener el control de las ventas efectuadas por los vendedores, para poder establecer el pago a los mismos, el cual se hace periódicamente mediante comisión.
+Algunos de los productos se venden en paquetes por media docena o por docenas, el cual tiene un costo más favorable que al detalle.
+De acuerdo a la producción y venta de los productos, se debe tener actualizado el inventario de producto terminado.
+
+Requerimientos
+Se requiere construir una aplicación que contenga los CRUDs para cada entidad de la base de datos, como también poder efectuar las transacciones: compra de materia prima, producción de productos, venta de productos, pago de comisión a vendedores, ventas registradas en mostrador, consulta de los inventarios de materia prima y producto terminado
+Además la aplicación deberá permitir establecer un chat entre el cliente y la empresa, en la cual se pueda establecer un diálogo entre estos, al finalizar el chat, deberá generar un archivo con todo el contenido de lo dialogado, tanto para el empleado de la tienda como para el cliente.
+Se debe simular la localización y el recorrido efectuado por los diferentes vendedores. (Geolocalización)
+
