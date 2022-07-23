@@ -1,5 +1,5 @@
 package Aplicacion.Clases.producto;
 
-public class ProductoTerminado {
+public class ProductoTerminado extends Producto{
   
 }

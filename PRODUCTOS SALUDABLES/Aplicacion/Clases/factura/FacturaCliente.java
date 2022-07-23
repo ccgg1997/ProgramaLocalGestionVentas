@@ -1,5 +1,5 @@
 package Aplicacion.Clases.factura;
 
-public class FacturaCliente {
+public class FacturaCliente extends Factura{
   
 }

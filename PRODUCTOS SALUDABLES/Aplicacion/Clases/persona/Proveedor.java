@@ -1,5 +1,5 @@
 package Aplicacion.Clases.persona;
 
-public class Proveedor {
+public class Proveedor extends Persona{
   
 }
