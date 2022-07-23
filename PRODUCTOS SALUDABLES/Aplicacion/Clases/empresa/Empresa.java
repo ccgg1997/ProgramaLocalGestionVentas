@@ -1,6 +1,16 @@
 package Aplicacion.Clases.empresa;
+import java.util.*;
 
+import Aplicacion.Clases.factura.Factura;
+import Aplicacion.Clases.persona.Cliente;
+import Aplicacion.Clases.persona.Proveedor;
+import Aplicacion.Clases.producto.Producto;
 public class Empresa {
+public ArrayList<Producto> productos = new ArrayList<>();
+public ArrayList<Factura> ventas = new ArrayList<>();
+public ArrayList<Factura> compras = new ArrayList<>();
+public ArrayList<Cliente> clientes = new ArrayList<>();
+public ArrayList<Proveedor> proveedores = new ArrayList<>();
   private String nombreEmpresa;
 	private int nit;
   
@@ -37,5 +47,25 @@ public class Empresa {
     this.nit = nit;
   }
 
+  
 
+  public void agregarVentas(){
+
+  }
+
+  public void agregarCompras(){
+
+
+  }
+
+  
+
+  public void eliminarVentas(){
+
+
+  }
+
+  public void eliminarCompras(){
+
+  }
 }

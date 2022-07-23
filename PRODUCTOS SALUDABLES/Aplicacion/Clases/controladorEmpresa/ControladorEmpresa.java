@@ -1,14 +1,16 @@
 package Aplicacion.Clases.controladorEmpresa;
 
 import Aplicacion.Clases.empresa.Empresa;
+import Aplicacion.Clases.factura.Factura;
+import Aplicacion.Clases.persona.Cliente;
+import Aplicacion.Clases.persona.Proveedor;
+import Aplicacion.Clases.producto.Producto;
 
-/* 
-public ArrayList<Producto> productos = new ArrayList<>();
-public ArrayList<Factura> ventas = new ArrayList<>();
-public ArrayList<Factura> compras = new ArrayList<>();
-public ArrayList<Cliente> clientes = new ArrayList<>();
-public ArrayList<Proveedor> proveedores = new ArrayList<>();*/
+import java.util.ArrayList;
+
+
 public class ControladorEmpresa {
+
   private Empresa empresa;
 
   public ControladorEmpresa(String nombreEmpresa, int nit) {
@@ -18,4 +20,32 @@ public class ControladorEmpresa {
   public ControladorEmpresa() {
 
   }
+
+  public void agregarCliente(){
+
+  }
+
+  public void agregarProveedor(){
+
+  }
+
+  public void mostrarCliente(){
+
+  }
+
+  public void mostrarProveedor(){
+
+
+  }
+
+  public void eliminarCliente(){
+    
+      
+    }
+
+  public void eliminarProveedor(){
+
+    }
+
+
 }
