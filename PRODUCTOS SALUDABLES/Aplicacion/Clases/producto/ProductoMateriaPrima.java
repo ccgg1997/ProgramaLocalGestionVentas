@@ -8,8 +8,8 @@ public class ProductoMateriaPrima extends Producto{
    * @param precioVenta
    * @param precioCompra
    */
-  public ProductoMateriaPrima(int codigo, int existencia, int precioVenta, int precioCompra) {
-    super(codigo, existencia, precioVenta, precioCompra);
+  public ProductoMateriaPrima(int codigo, int existencia, int precioVenta, int precioCompra,int cantidad) {
+    super(codigo, existencia, precioVenta, precioCompra,cantidad);
   }
 
   /**
