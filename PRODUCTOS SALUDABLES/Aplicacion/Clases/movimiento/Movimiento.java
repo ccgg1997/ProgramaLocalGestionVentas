@@ -1,16 +1,13 @@
 package Aplicacion.Clases.movimiento;
 
-import java.util.ArrayList;
 
-public class Movimiento {
+public class Movimiento{
   private int codFactura;
   private int codArticulos;
   private int cantidad;
   private int iva;
   private int precioVenta;
   private int descuento;
-  private int subTotal;
-  private double totalProductos;
   /**
    * @param codFactura
    * @param codArticulos
@@ -19,14 +16,13 @@ public class Movimiento {
    * @param precioVenta
    * @param descuento
    */
-  public Movimiento(int codFactura, int codArticulos, int cantidad, int iva, int precioVenta, int descuento,int subTotal) {
+  public Movimiento(int codFactura, int codArticulos, int cantidad, int iva, int precioVenta, int descuento) {
     this.codFactura = codFactura;
     this.codArticulos = codArticulos;
     this.cantidad = cantidad;
     this.iva = iva;
     this.precioVenta = precioVenta;
     this.descuento = descuento;
-    this.subTotal = subTotal;
   }
 
   public Movimiento() {
@@ -36,11 +32,7 @@ public class Movimiento {
     this.iva = 0;
     this.precioVenta = 0;
     this.descuento = 0;
-    this.subTotal = 0;
-    this.totalProductos = 0;
   }
-
- 
 
   /**
    * @return the codFactura
@@ -126,54 +118,8 @@ public class Movimiento {
     this.descuento = descuento;
   }
 
-  /**
-   * @return the subTotal
-   */
-  public int getSubTotal() {
-    return subTotal;
-  }
+  public void calcularTotal(){
 
-  /**
-   * @param subTotal the subTotal to set
-   */
-  public void setSubTotal(int subTotal) {
-    this.subTotal = subTotal;
-  }
-/**
-   * @return the totalProductos
-   */
-  public double getTotalProductos() {
-    return totalProductos;
-  }
-
-  /**
-   * @param subt the totalProductos to set
-   */
-  public void setTotalProductos(double totalProductos) {
-    this.totalProductos = totalProductos;
-  }
-  
-  public double subtotalItem(Movimiento item) {
-
-    double subtotalItem = item.getPrecioVenta() * item.getCantidad();
-
-    return subtotalItem;
-  }
-
-  
-
-  
-  public void calcularTotal(ArrayList <Movimiento> items){
-    
-      //this.setProductos(items);
-      double total=0;
-      for(int i = 0;i < items.size();i++){
-         total += items.get(i).getSubTotal();
-         
-         }
-         
-       this.setTotalProductos(total);
-   
 
   }
 
@@ -185,7 +131,5 @@ public class Movimiento {
   public void mostrarDetalleFactura(){
 
   }
-
-  
   
 }

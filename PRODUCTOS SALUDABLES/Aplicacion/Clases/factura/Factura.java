@@ -1,162 +1,107 @@
 package Aplicacion.Clases.factura;
-import java.util.*;
 
-import Aplicacion.Clases.producto.Producto;
-public class Factura {
-  private String nombreEmpresa;
-  private String direccion;
-  private int nit;
-  private String fecha;
-  private String tipoFactura;
-  private int idVendedor;
-  private int idFactura;
-  private int codEmpleado;
-  public  ArrayList <Producto> productos = new ArrayList<>();
-  /**
-   * @param nombreEmpresa
-   * @param direccion
-   * @param nit
-   * @param fecha
-   * @param tipoFactura
-   * @param idVendedor
-   * @param idFactura
-   * @param codEmpleado
-   */
-  public Factura(String nombreEmpresa, String direccion, int nit, String fecha, String tipoFactura, int idVendedor,
-      int idFactura, int codEmpleado) {
-    this.nombreEmpresa = nombreEmpresa;
-    this.direccion = direccion;
-    this.nit = nit;
-    this.fecha = fecha;
-    this.tipoFactura = tipoFactura;
-    this.idVendedor = idVendedor;
-    this.idFactura = idFactura;
-    this.codEmpleado = codEmpleado;
-  }
+//import java.util.ArrayList;
 
-  public Factura() {
-  this.nombreEmpresa = "";
-  this.direccion = "";
-  this.nit = 0;
-  this.fecha = "";
-  this.tipoFactura = "";
-  this.idVendedor = 0;
-  this.idFactura = 0;
-  this.codEmpleado = 0;
-  }
+import Aplicacion.Clases.movimiento.Movimiento;
 
-  /**
-   * @return the nombreEmpresa
-   */
-  public String getNombreEmpresa() {
-    return nombreEmpresa;
-  }
+public class Factura extends Movimiento{
+        private String nombreEmpresa;
+        private String direccion;
+        private int nit;
+        private String fecha;
+        private int idVendedor;
+        private int idFactura;
+        private int codEmpleado;  
+        private String tipoFactura;
+        //private ArrayList <Movimiento> detalleFactura = new ArrayList<>(); 
+        
+       public Factura(){
+           super();
+        }
+       
+         public Factura(String tipoFactura, String fecha, String nombreEmpresa,
+         String direccion, int nit, int codEmpleado){
+           super();
+           this.idFactura = 0;
+           this.tipoFactura = tipoFactura;
+           this.fecha = fecha;
+           this.nombreEmpresa = nombreEmpresa;
+           this.direccion = direccion;
+           this.nit = nit;
+           this.codEmpleado = codEmpleado;
+           
+        }
 
-  /**
-   * @param nombreEmpresa the nombreEmpresa to set
-   */
-  public void setNombreEmpresa(String nombreEmpresa) {
-    this.nombreEmpresa = nombreEmpresa;
-  }
+        public String getNombreEmpresa() {
+            return nombreEmpresa;
+        }
 
-  /**
-   * @return the direccion
-   */
-  public String getDireccion() {
-    return direccion;
-  }
+        public void setNombreEmpresa(String nombreEmpresa) {
+            this.nombreEmpresa = nombreEmpresa;
+        }
 
-  /**
-   * @param direccion the direccion to set
-   */
-  public void setDireccion(String direccion) {
-    this.direccion = direccion;
-  }
+        public String getDireccion() {
+            return direccion;
+        }
 
-  /**
-   * @return the nit
-   */
-  public int getNit() {
-    return nit;
-  }
+        public void setDireccion(String direccion) {
+            this.direccion = direccion;
+        }
 
-  /**
-   * @param nit the nit to set
-   */
-  public void setNit(int nit) {
-    this.nit = nit;
-  }
+        public int getNit() {
+            return nit;
+        }
 
-  /**
-   * @return the fecha
-   */
-  public String getFecha() {
-    return fecha;
-  }
+        public void setNit(int nit) {
+            this.nit = nit;
+        }
 
-  /**
-   * @param fecha the fecha to set
-   */
-  public void setFecha(String fecha) {
-    this.fecha = fecha;
-  }
+        public String getFecha() {
+            return fecha;
+        }
 
-  /**
-   * @return the tipoFactura
-   */
-  public String getTipoFactura() {
-    return tipoFactura;
-  }
+        public void setFecha(String fecha) {
+            this.fecha = fecha;
+        }
 
-  /**
-   * @param tipoFactura the tipoFactura to set
-   */
-  public void setTipoFactura(String tipoFactura) {
-    this.tipoFactura = tipoFactura;
-  }
+        public int getIdVendedor() {
+            return idVendedor;
+        }
 
-  /**
-   * @return the idVendedor
-   */
-  public int getIdVendedor() {
-    return idVendedor;
-  }
+        public void setIdVendedor(int idVendedor) {
+            this.idVendedor = idVendedor;
+        }
 
-  /**
-   * @param idVendedor the idVendedor to set
-   */
-  public void setIdVendedor(int idVendedor) {
-    this.idVendedor = idVendedor;
-  }
+        public int getIdFactura() {
+            return idFactura;
+        }
 
-  /**
-   * @return the idFactura
-   */
-  public int getIdFactura() {
-    return idFactura;
-  }
+        public void setIdFactura(int idFactura) {
+            this.idFactura = idFactura;
+        }
 
-  /**
-   * @param idFactura the idFactura to set
-   */
-  public void setIdFactura(int idFactura) {
-    this.idFactura = idFactura;
-  }
+        public int getCodEmpleado() {
+            return codEmpleado;
+        }
 
-  /**
-   * @return the codEmpleado
-   */
-  public int getCodEmpleado() {
-    return codEmpleado;
-  }
+        public void setCodEmpleado(int codEmpleado) {
+            this.codEmpleado = codEmpleado;
+        }
 
-  /**
-   * @param codEmpleado the codEmpleado to set
-   */
-  public void setCodEmpleado(int codEmpleado) {
-    this.codEmpleado = codEmpleado;
-  }
+        public String getTipoFactura() {
+            return tipoFactura;
+        }
 
-  
-  
-}
+        public void setTipoFactura(String tipoFactura) {
+            this.tipoFactura = tipoFactura;
+        }
+
+        // public ArrayList<Movimiento> getDetalleFactura() {
+        //     return detalleFactura;
+        // }
+
+        // public void setDetalleFactura(ArrayList<Movimiento> detalleFactura) {
+        //     this.detalleFactura = detalleFactura;
+        // }
+        
+    }
