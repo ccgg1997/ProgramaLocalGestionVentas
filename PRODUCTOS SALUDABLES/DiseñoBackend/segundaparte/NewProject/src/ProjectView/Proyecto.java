@@ -4,11 +4,18 @@
  */
 package ProjectView;
 
+import Modelo.Cliente;
+import Modelo.ClienteDao;
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author Valeria
  */
 public class Proyecto extends javax.swing.JFrame {
+    
+    Cliente cl = new Cliente();
+    ClienteDao client = new ClienteDao();
 
     /**
      * Creates new form Proyecto
@@ -415,7 +422,7 @@ public class Proyecto extends javax.swing.JFrame {
 
         jTabbedPane2.addTab("tab1", jPanel8);
 
-        jPanel9.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jPanel9.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
 
         lblCedulaCliente.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         lblCedulaCliente.setText("Cedula:");
@@ -431,6 +438,18 @@ public class Proyecto extends javax.swing.JFrame {
 
         jLabel13.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         jLabel13.setText("Razon Social");
+
+        txtCedulaCliente.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtCedulaClienteActionPerformed(evt);
+            }
+        });
+
+        txtTelefonoCliente.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtTelefonoClienteActionPerformed(evt);
+            }
+        });
 
         txtRazonSocialCliente.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -457,6 +476,11 @@ public class Proyecto extends javax.swing.JFrame {
 
         btnGuardarCliente.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/GuardarTodo.png"))); // NOI18N
         btnGuardarCliente.setText("Guardar");
+        btnGuardarCliente.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnGuardarClienteActionPerformed(evt);
+            }
+        });
 
         btnActualizarCliente.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/Actualizar (2).png"))); // NOI18N
         btnActualizarCliente.setText("Actualizar");
@@ -998,6 +1022,31 @@ public class Proyecto extends javax.swing.JFrame {
     private void txtTotalPagarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtTotalPagarActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtTotalPagarActionPerformed
+
+    private void btnGuardarClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarClienteActionPerformed
+        if (!"".equals(txtCedulaCliente.getText()) || !"".equals(txtNombreCliente.getText()) || !"".equals(txtTelefonoCliente.getText()) || !"".equals(txtDireccionCliente.getText())) {
+                    cl.setCedula(Integer.parseInt(txtCedulaCliente.getText()));
+                    cl.setNombre(txtNombreCliente.getText());
+                    cl.setTelefono(Integer.parseInt(txtTelefonoCliente.getText()));
+                    cl.setDireccion(txtDireccionCliente.getText());
+                    cl.setId(Integer.parseInt(txtRazonSocialCliente.getText()));
+                    client.RegistrarCliente(cl);
+                    JOptionPane.showMessageDialog(null, "Cliente Registrado");
+
+        } else {
+                    JOptionPane.showMessageDialog(null, "Los campos estan vacios");
+        }      // TODO add your handling code here:
+      
+            
+    }//GEN-LAST:event_btnGuardarClienteActionPerformed
+
+    private void txtCedulaClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtCedulaClienteActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtCedulaClienteActionPerformed
+
+    private void txtTelefonoClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtTelefonoClienteActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtTelefonoClienteActionPerformed
 
     /**
      * @param args the command line arguments
