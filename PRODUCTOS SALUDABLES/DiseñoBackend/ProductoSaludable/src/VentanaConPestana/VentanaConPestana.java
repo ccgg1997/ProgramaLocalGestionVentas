@@ -45,6 +45,7 @@ public class VentanaConPestana extends JFrame  implements ActionListener{
     private JPanel subgrupodatos_botones;
     private JPanel controles;
     private JPanel subgrupoinfo;
+    private JPanel ventas;
     
     private JLabel lblCantidadVentas;
     private JLabel lblid;
@@ -75,10 +76,12 @@ public class VentanaConPestana extends JFrame  implements ActionListener{
     
     
     private JComboBox<String> combo1;
-    private JTable tablainventario;  
+    private JTable tablainventario;
+    private JTable tablacrud; 
     private Container container;
     private JTabbedPane pestañas = new JTabbedPane();
-    DefaultTableModel dtm = new DefaultTableModel(); 
+    DefaultTableModel dtm = new DefaultTableModel();
+    DefaultTableModel dtmcrud = new DefaultTableModel(); 
     
     private JTextArea pantalla;
     private JScrollPane desliza;
@@ -88,6 +91,7 @@ public class VentanaConPestana extends JFrame  implements ActionListener{
     public VentanaConPestana(){
         panelBotones=new JPanel();
         panelcrud=new JPanel();
+        ventas=new JPanel();
         seleccioninventario="";
         seleccioncrud="";
         
@@ -97,6 +101,13 @@ public class VentanaConPestana extends JFrame  implements ActionListener{
         dtm.setRowCount(0);
         dtm.setColumnIdentifiers(titulos);
         tablainventario.setModel(dtm);
+        
+        tablacrud= new JTable();
+        tablacrud.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+        String [] tituloscrud = {"ID","NOMBRE ", "CANTIDAD "};
+        dtmcrud.setRowCount(0);
+        dtmcrud.setColumnIdentifiers(tituloscrud);
+        tablacrud.setModel(dtmcrud);
         
         panelBotones.add(tablainventario);
         
@@ -136,7 +147,7 @@ public class VentanaConPestana extends JFrame  implements ActionListener{
         
         pestañas.addTab("Inventario".toUpperCase(), panelInventario);
         pestañas.addTab("CRUD".toUpperCase(), panelcrud);
-        //pestañas.addTab("Ventas".toUpperCase(), ventas);
+        pestañas.addTab("Ventas".toUpperCase(), ventas);
         //pestañas.addTab("CRUD".toUpperCase(), graphics2d);
         
         
@@ -153,6 +164,7 @@ public class VentanaConPestana extends JFrame  implements ActionListener{
         panel.add(pestañas);   
         container.add(panel);
         pestañaCrud();
+        
         
         combocrud.addActionListener(new ActionListener() {
 			@Override
@@ -184,25 +196,38 @@ public class VentanaConPestana extends JFrame  implements ActionListener{
     
     private void selectorcrud(){
         
-        if("Producto".equals(seleccioncrud))
-        {
-            txttelefono.setEnabled(false);
-            txtid.setEnabled(true);
-            txtNombre.setEnabled(true);
-            txtcostoproduccion.setEnabled(true);
-            txtprecioventa.setEnabled(true);
-            txtjornada.setEnabled(false);
-            txtdireccion.setEnabled(false);
-        }
-        else if("Proveedor".equals(seleccioncrud) || "Cliente".equals(seleccioncrud) )
-        {
-            txttelefono.setEnabled(false);
-            txtid.setEnabled(true);
-            txtNombre.setEnabled(true);
-            txtcostoproduccion.setEnabled(true);
-            txtprecioventa.setEnabled(true);
-            txtjornada.setEnabled(false);
-            txtdireccion.setEnabled(false);
+        if(null != seleccioncrud)
+        switch (seleccioncrud) {
+            case "Producto":
+                txttelefono.setEnabled(false);
+                txtid.setEnabled(true);
+                txtNombre.setEnabled(true);
+                txtcostoproduccion.setEnabled(true);
+                txtprecioventa.setEnabled(true);
+                txtjornada.setEnabled(false);
+                txtdireccion.setEnabled(false);
+                break;
+            case "Proveedor":
+            case "Cliente":
+                txttelefono.setEnabled(true);
+                txtid.setEnabled(true);
+                txtNombre.setEnabled(true);
+                txtcostoproduccion.setEnabled(false);
+                txtprecioventa.setEnabled(false);
+                txtjornada.setEnabled(false);
+                txtdireccion.setEnabled(true);
+                break;
+            case "Vendedor":
+                txttelefono.setEnabled(true);
+                txtid.setEnabled(true);
+                txtNombre.setEnabled(true);
+                txtcostoproduccion.setEnabled(false);
+                txtprecioventa.setEnabled(false);
+                txtjornada.setEnabled(true);
+                txtdireccion.setEnabled(true);
+                break;
+            default:
+                break;
         }
         
     }
@@ -380,8 +405,6 @@ public class VentanaConPestana extends JFrame  implements ActionListener{
         }// Fin de try
         combo1.addActionListener(this);
     }
-    
-
     
     
     
