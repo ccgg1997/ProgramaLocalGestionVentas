@@ -6,7 +6,10 @@ package ProjectView;
 
 import Modelo.Cliente;
 import Modelo.ClienteDao;
+import java.util.HashSet;
+import java.util.List;
 import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -16,12 +19,39 @@ public class Proyecto extends javax.swing.JFrame {
     
     Cliente cl = new Cliente();
     ClienteDao client = new ClienteDao();
+    DefaultTableModel modelo=new DefaultTableModel();
 
     /**
      * Creates new form Proyecto
      */
     public Proyecto() {
         initComponents();
+        this.setLocationRelativeTo(null);
+    }
+    
+    public void listarClientes()
+    {
+        List<Cliente> listarC1= client.listarCliente();
+        modelo= (DefaultTableModel)tableCliente.getModel();
+        Object[] ob= new Object[6];
+        for (int i=0; i<listarC1.size();i++)
+        {
+            ob[0]=listarC1.get(i).getId();
+            ob[1]=listarC1.get(i).getCedula();
+            ob[2]=listarC1.get(i).getNombre();
+            ob[3]=listarC1.get(i).getTelefono();
+            ob[4]=listarC1.get(i).getDireccion();
+            modelo.addRow(ob);
+        }
+        tableCliente.setModel(modelo);
+    
+    }
+    
+    public void LimpiarTable() {
+        for (int i = 0; i < modelo.getRowCount(); i++) {
+            modelo.removeRow(i);
+            i = i - 1;
+        }
     }
 
     /**
@@ -465,6 +495,11 @@ public class Proyecto extends javax.swing.JFrame {
                 "Cedula", "Nombre", "Telefono", "Direccion", "Razon Social"
             }
         ));
+        tableCliente.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tableClienteMouseClicked(evt);
+            }
+        });
         jScrollPane2.setViewportView(tableCliente);
         if (tableCliente.getColumnModel().getColumnCount() > 0) {
             tableCliente.getColumnModel().getColumn(0).setPreferredWidth(50);
@@ -492,6 +527,11 @@ public class Proyecto extends javax.swing.JFrame {
 
         btnEliminarCliente.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/eliminar.png"))); // NOI18N
         btnEliminarCliente.setText("Eliminar");
+        btnEliminarCliente.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEliminarClienteActionPerformed(evt);
+            }
+        });
 
         btnNuevoCliente.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/nuevo.png"))); // NOI18N
         btnNuevoCliente.setText("Nuevo");
@@ -621,6 +661,11 @@ public class Proyecto extends javax.swing.JFrame {
 
         btnGuardarProveedor.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/GuardarTodo.png"))); // NOI18N
         btnGuardarProveedor.setText("Guardar");
+        btnGuardarProveedor.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnGuardarProveedorActionPerformed(evt);
+            }
+        });
 
         btnActualizarProveedor.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/Actualizar (2).png"))); // NOI18N
         btnActualizarProveedor.setText("Actualizar");
@@ -983,6 +1028,7 @@ public class Proyecto extends javax.swing.JFrame {
         jTabbedPane2.addTab("tab6", jPanel13);
 
         getContentPane().add(jTabbedPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 180, 890, 430));
+        jTabbedPane2.getAccessibleContext().setAccessibleName("Factura");
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -996,7 +1042,9 @@ public class Proyecto extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        // TODO add your handling code here:
+        LimpiarTable();
+        listarClientes();
+        jTabbedPane2.setSelectedIndex(1);
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
@@ -1017,6 +1065,26 @@ public class Proyecto extends javax.swing.JFrame {
 
     private void btnActualizarClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnActualizarClienteActionPerformed
         // TODO add your handling code here:
+        if("".equals(txtRazonSocialCliente.getText())){
+            JOptionPane.showMessageDialog(null,"seleccione fila");
+        }else{
+            cl.setCedula(Integer.parseInt(txtCedulaCliente.getText()));
+            cl.setId(Integer.parseInt(txtRazonSocialCliente.getText()));
+            cl.setTelefono(Integer.parseInt(txtTelefonoCliente.getText()));
+            cl.setNombre((txtNombreCliente.getText()));
+            cl.setDireccion((txtDireccionCliente.getText()));
+             if (!"".equals(txtCedulaCliente.getText()) || !"".equals(txtNombreCliente.getText()) || !"".equals(txtTelefonoCliente.getText()) || !"".equals(txtDireccionCliente.getText())) {
+                client.ModificarCliente(cl);
+                LimpiarTable();
+                limpiarcliente();
+                listarClientes();
+                     
+                 }
+             else{
+                 JOptionPane.showMessageDialog(null,"Campos Vacios");
+             }
+            
+        }
     }//GEN-LAST:event_btnActualizarClienteActionPerformed
 
     private void txtTotalPagarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtTotalPagarActionPerformed
@@ -1031,7 +1099,10 @@ public class Proyecto extends javax.swing.JFrame {
                     cl.setDireccion(txtDireccionCliente.getText());
                     cl.setId(Integer.parseInt(txtRazonSocialCliente.getText()));
                     client.RegistrarCliente(cl);
-                    JOptionPane.showMessageDialog(null, "Cliente Registrado");
+                    LimpiarTable();
+                    limpiarcliente();
+                    listarClientes();
+                    
 
         } else {
                     JOptionPane.showMessageDialog(null, "Los campos estan vacios");
@@ -1047,6 +1118,37 @@ public class Proyecto extends javax.swing.JFrame {
     private void txtTelefonoClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtTelefonoClienteActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtTelefonoClienteActionPerformed
+
+    private void btnGuardarProveedorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarProveedorActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnGuardarProveedorActionPerformed
+
+    private void tableClienteMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tableClienteMouseClicked
+        // TODO add your handling code here:
+        int fila = tableCliente.rowAtPoint(evt.getPoint());
+        txtRazonSocialCliente.setText(tableCliente.getValueAt(fila,0).toString());
+        txtCedulaCliente.setText(tableCliente.getValueAt(fila,1).toString());
+        txtNombreCliente.setText(tableCliente.getValueAt(fila,2).toString());
+        txtTelefonoCliente.setText(tableCliente.getValueAt(fila,3).toString());
+        txtDireccionCliente.setText(tableCliente.getValueAt(fila,4).toString());
+      
+
+    }//GEN-LAST:event_tableClienteMouseClicked
+
+    private void btnEliminarClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarClienteActionPerformed
+        // TODO add your handling code here:
+        if(!"".equals(txtRazonSocialCliente.getText()))
+        {
+            int pregunta=JOptionPane.showConfirmDialog(null,"Esta seguro que quiere eliminar");
+            if(pregunta==0){
+                int id= Integer.parseInt(txtRazonSocialCliente.getText());
+                client.eliminarCliente(id);
+                LimpiarTable();
+                limpiarcliente();
+                listarClientes();
+            }
+        }
+    }//GEN-LAST:event_btnEliminarClienteActionPerformed
 
     /**
      * @param args the command line arguments
@@ -1192,4 +1294,14 @@ public class Proyecto extends javax.swing.JFrame {
     private javax.swing.JTextField txtTelefonoProveedor;
     private javax.swing.JTextField txtTotalPagar;
     // End of variables declaration//GEN-END:variables
+
+private void limpiarcliente(){
+    txtIdCliente.setText("");
+    txtCedulaCliente.setText("");
+    txtNombreCliente.setText("");
+    txtTelefonoCliente.setText("");
+    txtDireccionCliente.setText("");
+    txtRazonSocialCliente.setText("");
+}
+
 }
