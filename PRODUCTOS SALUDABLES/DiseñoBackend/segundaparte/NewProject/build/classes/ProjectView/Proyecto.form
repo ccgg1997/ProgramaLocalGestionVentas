@@ -768,11 +768,11 @@
                   <Properties>
                     <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
                       <Table columnCount="5" rowCount="0">
-                        <Column editable="true" title="Cedula" type="java.lang.Object"/>
+                        <Column editable="true" title="Id" type="java.lang.Object"/>
                         <Column editable="true" title="Nombre" type="java.lang.Object"/>
+                        <Column editable="true" title="Cedula" type="java.lang.Object"/>
                         <Column editable="true" title="Telefono" type="java.lang.Object"/>
                         <Column editable="true" title="Direccion" type="java.lang.Object"/>
-                        <Column editable="true" title="Razon Social" type="java.lang.Object"/>
                       </Table>
                     </Property>
                     <Property name="columnModel" type="javax.swing.table.TableColumnModel" editor="org.netbeans.modules.form.editors2.TableColumnModelEditor">
@@ -1727,17 +1727,29 @@
                                       <Component id="txtDireccionVendedor" min="-2" pref="102" max="-2" attributes="0"/>
                                   </Group>
                               </Group>
-                              <EmptySpace min="-2" pref="28" max="-2" attributes="0"/>
-                              <Component id="lblTelefonoVendedor" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace type="separate" max="-2" attributes="0"/>
-                              <Component id="txtTelefonoVendedor" pref="103" max="32767" attributes="0"/>
-                              <EmptySpace min="-2" pref="57" max="-2" attributes="0"/>
-                              <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                                  <Component id="btnModificarVendedor" max="32767" attributes="0"/>
-                                  <Component id="btnAgregarVendedor" alignment="0" min="-2" pref="81" max="-2" attributes="0"/>
-                                  <Component id="btnActualizarVendedor" alignment="1" min="-2" max="-2" attributes="0"/>
+                              <Group type="103" groupAlignment="0" attributes="0">
+                                  <Group type="102" attributes="0">
+                                      <EmptySpace min="-2" pref="28" max="-2" attributes="0"/>
+                                      <Component id="lblTelefonoVendedor" min="-2" max="-2" attributes="0"/>
+                                      <EmptySpace type="separate" max="-2" attributes="0"/>
+                                      <Component id="txtTelefonoVendedor" pref="103" max="32767" attributes="0"/>
+                                      <Group type="103" groupAlignment="0" attributes="0">
+                                          <Group type="102" attributes="0">
+                                              <EmptySpace min="-2" pref="57" max="-2" attributes="0"/>
+                                              <Component id="btnAgregarVendedor" min="-2" pref="98" max="-2" attributes="0"/>
+                                          </Group>
+                                          <Group type="102" alignment="1" attributes="0">
+                                              <EmptySpace max="-2" attributes="0"/>
+                                              <Component id="btnModificarVendedor" min="-2" pref="98" max="-2" attributes="0"/>
+                                          </Group>
+                                      </Group>
+                                  </Group>
+                                  <Group type="102" attributes="0">
+                                      <EmptySpace max="32767" attributes="0"/>
+                                      <Component id="btnEliminarVendedor" min="-2" pref="97" max="-2" attributes="0"/>
+                                  </Group>
                               </Group>
-                              <EmptySpace min="-2" pref="139" max="-2" attributes="0"/>
+                              <EmptySpace min="-2" pref="122" max="-2" attributes="0"/>
                           </Group>
                       </Group>
                   </Group>
@@ -1746,46 +1758,48 @@
             <DimensionLayout dim="1">
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" alignment="0" attributes="0">
-                      <Component id="jLabel35" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace min="-2" pref="15" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="1" attributes="0">
-                          <Group type="103" groupAlignment="0" attributes="0">
-                              <Group type="102" attributes="0">
-                                  <Group type="103" groupAlignment="3" attributes="0">
-                                      <Component id="lblJornadaVendedor" alignment="3" min="-2" max="-2" attributes="0"/>
-                                      <Component id="txtJornadaVendedor" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Group type="102" alignment="1" attributes="0">
+                              <Component id="jLabel35" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace min="-2" pref="31" max="-2" attributes="0"/>
+                              <Group type="103" groupAlignment="0" attributes="0">
+                                  <Group type="102" attributes="0">
+                                      <Group type="103" groupAlignment="3" attributes="0">
+                                          <Component id="lblJornadaVendedor" alignment="3" min="-2" max="-2" attributes="0"/>
+                                          <Component id="txtJornadaVendedor" alignment="3" min="-2" max="-2" attributes="0"/>
+                                      </Group>
+                                      <EmptySpace type="separate" max="-2" attributes="0"/>
+                                      <Group type="103" groupAlignment="3" attributes="0">
+                                          <Component id="lblDireccionVendedor" alignment="3" min="-2" max="-2" attributes="0"/>
+                                          <Component id="txtDireccionVendedor" alignment="3" min="-2" max="-2" attributes="0"/>
+                                      </Group>
                                   </Group>
-                                  <EmptySpace type="separate" max="-2" attributes="0"/>
-                                  <Group type="103" groupAlignment="3" attributes="0">
-                                      <Component id="lblDireccionVendedor" alignment="3" min="-2" max="-2" attributes="0"/>
-                                      <Component id="txtDireccionVendedor" alignment="3" min="-2" max="-2" attributes="0"/>
+                                  <Group type="102" alignment="0" attributes="0">
+                                      <Group type="103" groupAlignment="3" attributes="0">
+                                          <Component id="lblCedulaVendedor" alignment="3" min="-2" max="-2" attributes="0"/>
+                                          <Component id="txtCedulaVendedor" alignment="3" min="-2" max="-2" attributes="0"/>
+                                      </Group>
+                                      <EmptySpace type="separate" max="-2" attributes="0"/>
+                                      <Group type="103" groupAlignment="3" attributes="0">
+                                          <Component id="lblNombreVendedor" alignment="3" min="-2" max="-2" attributes="0"/>
+                                          <Component id="txtnombreVendedor" alignment="3" min="-2" max="-2" attributes="0"/>
+                                      </Group>
                                   </Group>
-                              </Group>
-                              <Group type="102" alignment="0" attributes="0">
-                                  <Group type="103" groupAlignment="3" attributes="0">
-                                      <Component id="lblCedulaVendedor" alignment="3" min="-2" max="-2" attributes="0"/>
-                                      <Component id="txtCedulaVendedor" alignment="3" min="-2" max="-2" attributes="0"/>
+                                  <Group type="102" alignment="1" attributes="0">
+                                      <Group type="103" groupAlignment="3" attributes="0">
+                                          <Component id="lblTelefonoVendedor" alignment="3" min="-2" max="-2" attributes="0"/>
+                                          <Component id="txtTelefonoVendedor" alignment="3" min="-2" max="-2" attributes="0"/>
+                                      </Group>
+                                      <EmptySpace min="-2" pref="23" max="-2" attributes="0"/>
                                   </Group>
-                                  <EmptySpace type="separate" max="-2" attributes="0"/>
-                                  <Group type="103" groupAlignment="3" attributes="0">
-                                      <Component id="lblNombreVendedor" alignment="3" min="-2" max="-2" attributes="0"/>
-                                      <Component id="txtnombreVendedor" alignment="3" min="-2" max="-2" attributes="0"/>
-                                  </Group>
-                              </Group>
-                              <Group type="102" alignment="1" attributes="0">
-                                  <Group type="103" groupAlignment="3" attributes="0">
-                                      <Component id="lblTelefonoVendedor" alignment="3" min="-2" max="-2" attributes="0"/>
-                                      <Component id="txtTelefonoVendedor" alignment="3" min="-2" max="-2" attributes="0"/>
-                                  </Group>
-                                  <EmptySpace min="-2" pref="23" max="-2" attributes="0"/>
                               </Group>
                           </Group>
-                          <Group type="102" attributes="0">
+                          <Group type="102" alignment="1" attributes="0">
                               <Component id="btnAgregarVendedor" min="-2" max="-2" attributes="0"/>
                               <EmptySpace max="-2" attributes="0"/>
                               <Component id="btnModificarVendedor" min="-2" max="-2" attributes="0"/>
                               <EmptySpace max="-2" attributes="0"/>
-                              <Component id="btnActualizarVendedor" min="-2" max="-2" attributes="0"/>
+                              <Component id="btnEliminarVendedor" min="-2" max="-2" attributes="0"/>
                           </Group>
                       </Group>
                       <EmptySpace pref="29" max="32767" attributes="0"/>
@@ -1802,14 +1816,11 @@
               </Properties>
             </Component>
             <Component class="javax.swing.JTextField" name="txtCedulaVendedor">
-              <Properties>
-                <Property name="text" type="java.lang.String" value="jTextField2"/>
-              </Properties>
             </Component>
             <Component class="javax.swing.JTextField" name="txtnombreVendedor">
-              <Properties>
-                <Property name="text" type="java.lang.String" value="jTextField2"/>
-              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="txtnombreVendedorActionPerformed"/>
+              </Events>
             </Component>
             <Component class="javax.swing.JLabel" name="lblNombreVendedor">
               <Properties>
@@ -1817,9 +1828,6 @@
               </Properties>
             </Component>
             <Component class="javax.swing.JTextField" name="txtTelefonoVendedor">
-              <Properties>
-                <Property name="text" type="java.lang.String" value="jTextField2"/>
-              </Properties>
             </Component>
             <Component class="javax.swing.JLabel" name="lblTelefonoVendedor">
               <Properties>
@@ -1827,9 +1835,9 @@
               </Properties>
             </Component>
             <Component class="javax.swing.JTextField" name="txtJornadaVendedor">
-              <Properties>
-                <Property name="text" type="java.lang.String" value="jTextField2"/>
-              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="txtJornadaVendedorActionPerformed"/>
+              </Events>
             </Component>
             <Component class="javax.swing.JLabel" name="lblJornadaVendedor">
               <Properties>
@@ -1837,9 +1845,6 @@
               </Properties>
             </Component>
             <Component class="javax.swing.JTextField" name="txtDireccionVendedor">
-              <Properties>
-                <Property name="text" type="java.lang.String" value="jTextField2"/>
-              </Properties>
             </Component>
             <Component class="javax.swing.JLabel" name="lblDireccionVendedor">
               <Properties>
@@ -1902,29 +1907,31 @@
                       <TableHeader reorderingAllowed="true" resizingAllowed="true"/>
                     </Property>
                   </Properties>
+                  <Events>
+                    <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="tableVendedorMouseClicked"/>
+                  </Events>
                 </Component>
               </SubComponents>
             </Container>
             <Component class="javax.swing.JButton" name="btnAgregarVendedor">
               <Properties>
-                <Property name="text" type="java.lang.String" value="agregar"/>
-                <Property name="actionCommand" type="java.lang.String" value="agregar"/>
+                <Property name="text" type="java.lang.String" value="Agregar"/>
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnAgregarVendedorActionPerformed"/>
               </Events>
             </Component>
-            <Component class="javax.swing.JButton" name="btnActualizarVendedor">
+            <Component class="javax.swing.JButton" name="btnEliminarVendedor">
               <Properties>
-                <Property name="text" type="java.lang.String" value="actualizar"/>
+                <Property name="text" type="java.lang.String" value="Eliminar"/>
               </Properties>
               <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnActualizarVendedorActionPerformed"/>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnEliminarVendedorActionPerformed"/>
               </Events>
             </Component>
             <Component class="javax.swing.JButton" name="btnModificarVendedor">
               <Properties>
-                <Property name="text" type="java.lang.String" value="modificar"/>
+                <Property name="text" type="java.lang.String" value="Modificar"/>
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnModificarVendedorActionPerformed"/>
