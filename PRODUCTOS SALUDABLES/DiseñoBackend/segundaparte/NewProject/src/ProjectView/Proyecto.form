@@ -41,10 +41,10 @@
         <DimensionLayout dim="0">
           <Group type="103" groupAlignment="0" attributes="0">
               <Component id="jButton3" alignment="0" max="32767" attributes="0"/>
-              <Component id="jButton2" alignment="1" max="32767" attributes="0"/>
-              <Component id="jButton1" alignment="1" pref="190" max="32767" attributes="0"/>
-              <Component id="jButton4" alignment="1" max="32767" attributes="0"/>
-              <Component id="jButton5" alignment="1" max="32767" attributes="0"/>
+              <Component id="btnClientes" alignment="1" max="32767" attributes="0"/>
+              <Component id="btnNuevaVentana" alignment="1" pref="190" max="32767" attributes="0"/>
+              <Component id="btnProductos" alignment="1" max="32767" attributes="0"/>
+              <Component id="btnVentas" alignment="1" max="32767" attributes="0"/>
               <Component id="jButton6" alignment="1" max="32767" attributes="0"/>
           </Group>
         </DimensionLayout>
@@ -52,15 +52,15 @@
           <Group type="103" groupAlignment="0" attributes="0">
               <Group type="102" alignment="0" attributes="0">
                   <EmptySpace min="-2" pref="34" max="-2" attributes="0"/>
-                  <Component id="jButton1" min="-2" pref="40" max="-2" attributes="0"/>
+                  <Component id="btnNuevaVentana" min="-2" pref="40" max="-2" attributes="0"/>
                   <EmptySpace type="separate" max="-2" attributes="0"/>
-                  <Component id="jButton2" min="-2" pref="37" max="-2" attributes="0"/>
+                  <Component id="btnClientes" min="-2" pref="37" max="-2" attributes="0"/>
                   <EmptySpace type="separate" max="-2" attributes="0"/>
                   <Component id="jButton3" min="-2" pref="42" max="-2" attributes="0"/>
                   <EmptySpace type="separate" max="-2" attributes="0"/>
-                  <Component id="jButton4" min="-2" pref="38" max="-2" attributes="0"/>
+                  <Component id="btnProductos" min="-2" pref="38" max="-2" attributes="0"/>
                   <EmptySpace type="separate" max="-2" attributes="0"/>
-                  <Component id="jButton5" min="-2" pref="32" max="-2" attributes="0"/>
+                  <Component id="btnVentas" min="-2" pref="32" max="-2" attributes="0"/>
                   <EmptySpace type="separate" max="-2" attributes="0"/>
                   <Component id="jButton6" min="-2" max="-2" attributes="0"/>
                   <EmptySpace max="32767" attributes="0"/>
@@ -69,7 +69,7 @@
         </DimensionLayout>
       </Layout>
       <SubComponents>
-        <Component class="javax.swing.JButton" name="jButton1">
+        <Component class="javax.swing.JButton" name="btnNuevaVentana">
           <Properties>
             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
               <Image iconType="3" name="/Img/Nventa.png"/>
@@ -77,10 +77,10 @@
             <Property name="text" type="java.lang.String" value="Nueva Venta"/>
           </Properties>
           <Events>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton1ActionPerformed"/>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnNuevaVentanaActionPerformed"/>
           </Events>
         </Component>
-        <Component class="javax.swing.JButton" name="jButton2">
+        <Component class="javax.swing.JButton" name="btnClientes">
           <Properties>
             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
               <Image iconType="3" name="/Img/Clientes.png"/>
@@ -88,7 +88,7 @@
             <Property name="text" type="java.lang.String" value="Clientes"/>
           </Properties>
           <Events>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton2ActionPerformed"/>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnClientesActionPerformed"/>
           </Events>
         </Component>
         <Component class="javax.swing.JButton" name="jButton3">
@@ -98,8 +98,11 @@
             </Property>
             <Property name="text" type="java.lang.String" value="Proveedor"/>
           </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton3ActionPerformed"/>
+          </Events>
         </Component>
-        <Component class="javax.swing.JButton" name="jButton4">
+        <Component class="javax.swing.JButton" name="btnProductos">
           <Properties>
             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
               <Image iconType="3" name="/Img/producto.png"/>
@@ -107,10 +110,10 @@
             <Property name="text" type="java.lang.String" value="Productos"/>
           </Properties>
           <Events>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton4ActionPerformed"/>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnProductosActionPerformed"/>
           </Events>
         </Component>
-        <Component class="javax.swing.JButton" name="jButton5">
+        <Component class="javax.swing.JButton" name="btnVentas">
           <Properties>
             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
               <Image iconType="3" name="/Img/compras.png"/>
@@ -118,7 +121,7 @@
             <Property name="text" type="java.lang.String" value="Ventas"/>
           </Properties>
           <Events>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton5ActionPerformed"/>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnVentasActionPerformed"/>
           </Events>
         </Component>
         <Component class="javax.swing.JButton" name="jButton6">
@@ -219,7 +222,7 @@
                                                       <EmptySpace max="-2" attributes="0"/>
                                                       <Component id="txtNombreClienteVenta" min="-2" pref="94" max="-2" attributes="0"/>
                                                       <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                                                      <Component id="lblTelefonoClienteVenta" min="-2" pref="12" max="-2" attributes="0"/>
+                                                      <Component id="txtTelefonoClienteVenta" min="-2" pref="12" max="-2" attributes="0"/>
                                                   </Group>
                                                   <Group type="102" alignment="1" attributes="0">
                                                       <Component id="jTextField1" min="-2" pref="91" max="-2" attributes="0"/>
@@ -303,7 +306,7 @@
                               <Group type="103" groupAlignment="3" attributes="0">
                                   <Component id="txtCedulaClienteVenta" alignment="3" min="-2" max="-2" attributes="0"/>
                                   <Component id="txtNombreClienteVenta" alignment="3" min="-2" max="-2" attributes="0"/>
-                                  <Component id="lblTelefonoClienteVenta" alignment="3" min="-2" pref="22" max="-2" attributes="0"/>
+                                  <Component id="txtTelefonoClienteVenta" alignment="3" min="-2" pref="22" max="-2" attributes="0"/>
                                   <Component id="txtDireccionClienteVenta" alignment="3" min="-2" max="-2" attributes="0"/>
                                   <Component id="txtRazonClienteVenta" alignment="3" min="-2" max="-2" attributes="0"/>
                               </Group>
@@ -377,6 +380,9 @@
                 </Property>
                 <Property name="text" type="java.lang.String" value="Borrar"/>
               </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnEliminarVentaActionPerformed"/>
+              </Events>
             </Component>
             <Component class="javax.swing.JTextField" name="txtCodigoVenta">
               <Events>
@@ -478,10 +484,13 @@
               </Properties>
             </Component>
             <Component class="javax.swing.JTextField" name="txtCedulaClienteVenta">
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="txtCedulaClienteVentaActionPerformed"/>
+              </Events>
             </Component>
             <Component class="javax.swing.JTextField" name="txtNombreClienteVenta">
             </Component>
-            <Component class="javax.swing.JLabel" name="lblTelefonoClienteVenta">
+            <Component class="javax.swing.JLabel" name="txtTelefonoClienteVenta">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Telefono"/>
               </Properties>
@@ -696,7 +705,7 @@
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                   <Font name="Segoe UI" size="12" style="1"/>
                 </Property>
-                <Property name="text" type="java.lang.String" value="Razon Social"/>
+                <Property name="text" type="java.lang.String" value="Nit"/>
               </Properties>
             </Component>
             <Component class="javax.swing.JTextField" name="txtCedulaCliente">
@@ -951,10 +960,13 @@
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                   <Font name="Segoe UI" size="12" style="1"/>
                 </Property>
-                <Property name="text" type="java.lang.String" value="RazonSocial"/>
+                <Property name="text" type="java.lang.String" value="MateriaPrima"/>
               </Properties>
             </Component>
             <Component class="javax.swing.JTextField" name="txtNitProveedor">
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="txtNitProveedorActionPerformed"/>
+              </Events>
             </Component>
             <Component class="javax.swing.JTextField" name="txtNombreProveedor">
             </Component>
@@ -979,7 +991,7 @@
                         <Column editable="true" title="Nombre" type="java.lang.Object"/>
                         <Column editable="true" title="Telefono" type="java.lang.Object"/>
                         <Column editable="true" title="Direccion" type="java.lang.Object"/>
-                        <Column editable="true" title="RazonSocial" type="java.lang.Object"/>
+                        <Column editable="true" title="MateriaPrima" type="java.lang.Object"/>
                       </Table>
                     </Property>
                     <Property name="columnModel" type="javax.swing.table.TableColumnModel" editor="org.netbeans.modules.form.editors2.TableColumnModelEditor">
@@ -1015,6 +1027,9 @@
                       <TableHeader reorderingAllowed="true" resizingAllowed="true"/>
                     </Property>
                   </Properties>
+                  <Events>
+                    <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="tableProveedorMouseClicked"/>
+                  </Events>
                 </Component>
               </SubComponents>
             </Container>
@@ -1036,6 +1051,9 @@
                 </Property>
                 <Property name="text" type="java.lang.String" value="Actualizar"/>
               </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnActualizarProveedorActionPerformed"/>
+              </Events>
             </Component>
             <Component class="javax.swing.JButton" name="btnEliminarProveedor">
               <Properties>
@@ -1044,6 +1062,9 @@
                 </Property>
                 <Property name="text" type="java.lang.String" value="Eliminar"/>
               </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnEliminarProveedorActionPerformed"/>
+              </Events>
             </Component>
             <Component class="javax.swing.JTextField" name="txtIdProveedor">
               <Properties>
@@ -1277,6 +1298,9 @@
                       <TableHeader reorderingAllowed="true" resizingAllowed="true"/>
                     </Property>
                   </Properties>
+                  <Events>
+                    <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="tableProductoMouseClicked"/>
+                  </Events>
                 </Component>
               </SubComponents>
             </Container>
@@ -1298,6 +1322,9 @@
                 </Property>
                 <Property name="text" type="java.lang.String" value="Actualizar"/>
               </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnActualizarProductoActionPerformed"/>
+              </Events>
             </Component>
             <Component class="javax.swing.JButton" name="btnEliminarProducto">
               <Properties>
@@ -1306,6 +1333,9 @@
                 </Property>
                 <Property name="text" type="java.lang.String" value="Eliminar"/>
               </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnEliminarProductoActionPerformed"/>
+              </Events>
             </Component>
             <Component class="javax.swing.JTextField" name="txtIdProducto">
             </Component>
@@ -1482,18 +1512,16 @@
                                   <EmptySpace min="-2" pref="19" max="-2" attributes="0"/>
                                   <Component id="jButton21" min="-2" max="-2" attributes="0"/>
                               </Group>
-                              <Group type="103" groupAlignment="0" attributes="0">
-                                  <Group type="103" alignment="0" groupAlignment="1" max="-2" attributes="0">
-                                      <Component id="jTextField15" alignment="0" max="32767" attributes="0"/>
-                                      <Component id="jLabel24" alignment="0" min="-2" max="-2" attributes="0"/>
-                                      <Component id="jLabel28" alignment="0" min="-2" max="-2" attributes="0"/>
-                                      <Component id="jLabel25" alignment="0" min="-2" max="-2" attributes="0"/>
-                                      <Component id="jTextField19" alignment="0" min="-2" pref="141" max="-2" attributes="0"/>
-                                  </Group>
-                                  <Component id="jTextField16" alignment="0" min="-2" pref="141" max="-2" attributes="0"/>
-                                  <Component id="jLabel27" alignment="0" min="-2" max="-2" attributes="0"/>
-                                  <Component id="jTextField18" alignment="0" min="-2" pref="141" max="-2" attributes="0"/>
+                              <Group type="103" alignment="0" groupAlignment="1" max="-2" attributes="0">
+                                  <Component id="jTextField15" alignment="0" max="32767" attributes="0"/>
+                                  <Component id="jLabel24" alignment="0" min="-2" max="-2" attributes="0"/>
+                                  <Component id="jLabel28" alignment="0" min="-2" max="-2" attributes="0"/>
+                                  <Component id="jLabel25" alignment="0" min="-2" max="-2" attributes="0"/>
+                                  <Component id="jTextField19" alignment="0" min="-2" pref="141" max="-2" attributes="0"/>
                               </Group>
+                              <Component id="jTextField16" alignment="0" min="-2" pref="141" max="-2" attributes="0"/>
+                              <Component id="jLabel27" alignment="0" min="-2" max="-2" attributes="0"/>
+                              <Component id="jTextField18" alignment="0" min="-2" pref="141" max="-2" attributes="0"/>
                           </Group>
                           <EmptySpace pref="88" max="32767" attributes="0"/>
                       </Group>

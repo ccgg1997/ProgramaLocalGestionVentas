@@ -8,6 +8,9 @@ import Modelo.Cliente;
 import Modelo.ClienteDao;
 import Modelo.Producto;
 import Modelo.ProductoDao;
+import Modelo.Proveedor;
+import Modelo.ProveedorDao;
+import Modelo.Detalle;
 import Modelo.Venta;
 import Modelo.VentaDao;
 import java.awt.event.KeyEvent;
@@ -16,6 +19,8 @@ import java.util.HashSet;
 import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
+import org.jdesktop.swingx.autocomplete.AutoCompleteDecorator;
+import org.jdesktop.swingx.autocomplete.ObjectToStringConverter;
 
 /**
  *
@@ -30,8 +35,13 @@ public class Proyecto extends javax.swing.JFrame {
     VentaDao vdao = new VentaDao();
     Producto p = new Producto();
     ProductoDao pdao = new ProductoDao();
+    Proveedor pr=new Proveedor();
+    ProveedorDao prdao= new ProveedorDao();
+    Detalle Dv = new Detalle();
+    DefaultTableModel tmp =new DefaultTableModel();
     int item;
     int totalPagar = 0;
+
 
     /**
      * Creates new form Proyecto
@@ -39,8 +49,22 @@ public class Proyecto extends javax.swing.JFrame {
     public Proyecto() {
         initComponents();
         this.setLocationRelativeTo(null);
+        txtIdNuevaVentaProducto.setVisible(false);
+        txtTelefonoClienteVenta.setVisible(false);
+        txtDireccionClienteVenta.setVisible(false);
+        txtRazonClienteVenta.setVisible(false);
+        txtIdCliente.setVisible(false);
+        txtIdProveedor.setVisible(false);
+        txtIdProducto.setVisible(false);
+        txtIdVenta.setVisible(false);
+        AutoCompleteDecorator.decorate(cdxProveedorProducto);
+        pdao.ConsultarProveedor(cdxProveedorProducto);
+        this.setLocationRelativeTo(null);
     }
     
+    //ZONA DE LISTAR
+    //las siguientes funciones listan los datos
+    //en las tablas de: CLIENTE, PROVEEVOR Y PRODUCTO
     public void listarClientes()
     {
         List<Cliente> listarC1= client.listarCliente();
@@ -59,6 +83,48 @@ public class Proyecto extends javax.swing.JFrame {
     
     }
     
+    public void ListarProveedor()
+    {
+        List<Proveedor> listarpr= prdao.listarProveedor();
+        modelo= (DefaultTableModel)tableProveedor.getModel();
+        Object[] ob= new Object[5];
+        //String aux="";
+  
+        for (int i=0; i<listarpr.size();i++)
+        {
+            
+            ob[0]=listarpr.get(i).getNit();
+            ob[1]=listarpr.get(i).getNombre();
+            ob[2]=listarpr.get(i).getTelefono();
+            ob[3]=listarpr.get(i).getDireccion();
+            ob[4]=listarpr.get(i).getMateriaPrima();
+            //aux=listarpr.get(i).getNombre();
+            modelo.addRow(ob);
+        }
+        tableProveedor.setModel(modelo);
+        
+    
+    }
+    
+     public void listarProductos()
+    {
+        List<Producto> ListarPro= pdao.listarProductos();
+        modelo= (DefaultTableModel)tableProducto.getModel();
+        Object[] ob= new Object[6];
+        for (int i=0; i<ListarPro.size();i++)
+        {
+            ob[0]=ListarPro.get(i).getId();
+            ob[1]=ListarPro.get(i).getNombre();
+            ob[2]=ListarPro.get(i).getProveedor();
+            ob[3]=ListarPro.get(i).getCantidad();
+            ob[4]=ListarPro.get(i).getPrecio();
+            modelo.addRow(ob);
+        }
+        tableProducto.setModel(modelo);
+    
+    }
+    
+    //FUNCION PARA  LIMPIAR TABLA 
     public void LimpiarTable() {
         for (int i = 0; i < modelo.getRowCount(); i++) {
             modelo.removeRow(i);
@@ -76,11 +142,11 @@ public class Proyecto extends javax.swing.JFrame {
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
-        jButton1 = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
+        btnNuevaVentana = new javax.swing.JButton();
+        btnClientes = new javax.swing.JButton();
         jButton3 = new javax.swing.JButton();
-        jButton4 = new javax.swing.JButton();
-        jButton5 = new javax.swing.JButton();
+        btnProductos = new javax.swing.JButton();
+        btnVentas = new javax.swing.JButton();
         jButton6 = new javax.swing.JButton();
         jTabbedPane2 = new javax.swing.JTabbedPane();
         jPanel8 = new javax.swing.JPanel();
@@ -102,7 +168,7 @@ public class Proyecto extends javax.swing.JFrame {
         lblTotal = new javax.swing.JLabel();
         txtCedulaClienteVenta = new javax.swing.JTextField();
         txtNombreClienteVenta = new javax.swing.JTextField();
-        lblTelefonoClienteVenta = new javax.swing.JLabel();
+        txtTelefonoClienteVenta = new javax.swing.JLabel();
         txtDireccionClienteVenta = new javax.swing.JTextField();
         txtRazonClienteVenta = new javax.swing.JTextField();
         btnFacturar = new javax.swing.JButton();
@@ -191,38 +257,43 @@ public class Proyecto extends javax.swing.JFrame {
 
         jPanel1.setBackground(new java.awt.Color(240, 139, 72));
 
-        jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/Nventa.png"))); // NOI18N
-        jButton1.setText("Nueva Venta");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        btnNuevaVentana.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/Nventa.png"))); // NOI18N
+        btnNuevaVentana.setText("Nueva Venta");
+        btnNuevaVentana.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                btnNuevaVentanaActionPerformed(evt);
             }
         });
 
-        jButton2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/Clientes.png"))); // NOI18N
-        jButton2.setText("Clientes");
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
+        btnClientes.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/Clientes.png"))); // NOI18N
+        btnClientes.setText("Clientes");
+        btnClientes.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
+                btnClientesActionPerformed(evt);
             }
         });
 
         jButton3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/proveedor.png"))); // NOI18N
         jButton3.setText("Proveedor");
-
-        jButton4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/producto.png"))); // NOI18N
-        jButton4.setText("Productos");
-        jButton4.addActionListener(new java.awt.event.ActionListener() {
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton4ActionPerformed(evt);
+                jButton3ActionPerformed(evt);
             }
         });
 
-        jButton5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/compras.png"))); // NOI18N
-        jButton5.setText("Ventas");
-        jButton5.addActionListener(new java.awt.event.ActionListener() {
+        btnProductos.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/producto.png"))); // NOI18N
+        btnProductos.setText("Productos");
+        btnProductos.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton5ActionPerformed(evt);
+                btnProductosActionPerformed(evt);
+            }
+        });
+
+        btnVentas.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/compras.png"))); // NOI18N
+        btnVentas.setText("Ventas");
+        btnVentas.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnVentasActionPerformed(evt);
             }
         });
 
@@ -234,25 +305,25 @@ public class Proyecto extends javax.swing.JFrame {
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jButton3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(jButton2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(jButton1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 190, Short.MAX_VALUE)
-            .addComponent(jButton4, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(jButton5, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(btnClientes, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(btnNuevaVentana, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 190, Short.MAX_VALUE)
+            .addComponent(btnProductos, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(btnVentas, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(jButton6, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(34, 34, 34)
-                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(btnNuevaVentana, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(btnClientes, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(btnProductos, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(btnVentas, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(jButton6)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -277,6 +348,11 @@ public class Proyecto extends javax.swing.JFrame {
 
         btnEliminarVenta.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/eliminar.png"))); // NOI18N
         btnEliminarVenta.setText("Borrar");
+        btnEliminarVenta.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEliminarVentaActionPerformed(evt);
+            }
+        });
 
         txtCodigoVenta.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -328,7 +404,13 @@ public class Proyecto extends javax.swing.JFrame {
         lblTotal.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/money.png"))); // NOI18N
         lblTotal.setText("Total a pagar");
 
-        lblTelefonoClienteVenta.setText("Telefono");
+        txtCedulaClienteVenta.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtCedulaClienteVentaActionPerformed(evt);
+            }
+        });
+
+        txtTelefonoClienteVenta.setText("Telefono");
 
         txtDireccionClienteVenta.setText("jTextField1");
         txtDireccionClienteVenta.addActionListener(new java.awt.event.ActionListener() {
@@ -411,7 +493,7 @@ public class Proyecto extends javax.swing.JFrame {
                                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                                 .addComponent(txtNombreClienteVenta, javax.swing.GroupLayout.PREFERRED_SIZE, 94, javax.swing.GroupLayout.PREFERRED_SIZE)
                                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                                .addComponent(lblTelefonoClienteVenta, javax.swing.GroupLayout.PREFERRED_SIZE, 12, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                                .addComponent(txtTelefonoClienteVenta, javax.swing.GroupLayout.PREFERRED_SIZE, 12, javax.swing.GroupLayout.PREFERRED_SIZE))
                                             .addGroup(jPanel8Layout.createSequentialGroup()
                                                 .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE)
                                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -473,7 +555,7 @@ public class Proyecto extends javax.swing.JFrame {
                         .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(txtCedulaClienteVenta, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(txtNombreClienteVenta, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(lblTelefonoClienteVenta, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtTelefonoClienteVenta, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(txtDireccionClienteVenta, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(txtRazonClienteVenta, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(18, 18, 18)
@@ -508,7 +590,7 @@ public class Proyecto extends javax.swing.JFrame {
         jLabel11.setText("Direccion");
 
         jLabel13.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        jLabel13.setText("Razon Social");
+        jLabel13.setText("Nit");
 
         txtCedulaCliente.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -675,16 +757,27 @@ public class Proyecto extends javax.swing.JFrame {
         jLabel17.setText("Direccion");
 
         jLabel18.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
-        jLabel18.setText("RazonSocial");
+        jLabel18.setText("MateriaPrima");
+
+        txtNitProveedor.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtNitProveedorActionPerformed(evt);
+            }
+        });
 
         tableProveedor.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
             new String [] {
-                "Nit", "Nombre", "Telefono", "Direccion", "RazonSocial"
+                "Nit", "Nombre", "Telefono", "Direccion", "MateriaPrima"
             }
         ));
+        tableProveedor.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tableProveedorMouseClicked(evt);
+            }
+        });
         jScrollPane3.setViewportView(tableProveedor);
         if (tableProveedor.getColumnModel().getColumnCount() > 0) {
             tableProveedor.getColumnModel().getColumn(0).setPreferredWidth(40);
@@ -704,9 +797,19 @@ public class Proyecto extends javax.swing.JFrame {
 
         btnActualizarProveedor.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/Actualizar (2).png"))); // NOI18N
         btnActualizarProveedor.setText("Actualizar");
+        btnActualizarProveedor.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnActualizarProveedorActionPerformed(evt);
+            }
+        });
 
         btnEliminarProveedor.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/eliminar.png"))); // NOI18N
         btnEliminarProveedor.setText("Eliminar");
+        btnEliminarProveedor.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEliminarProveedorActionPerformed(evt);
+            }
+        });
 
         txtIdProveedor.setText("jTextField1");
 
@@ -810,6 +913,11 @@ public class Proyecto extends javax.swing.JFrame {
                 "Codigo", "Descripcion", "Cantidad", "Precio", "Proveedor"
             }
         ));
+        tableProducto.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tableProductoMouseClicked(evt);
+            }
+        });
         jScrollPane4.setViewportView(tableProducto);
         if (tableProducto.getColumnModel().getColumnCount() > 0) {
             tableProducto.getColumnModel().getColumn(0).setPreferredWidth(50);
@@ -829,9 +937,19 @@ public class Proyecto extends javax.swing.JFrame {
 
         btnActualizarProducto.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/Actualizar (2).png"))); // NOI18N
         btnActualizarProducto.setText("Actualizar");
+        btnActualizarProducto.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnActualizarProductoActionPerformed(evt);
+            }
+        });
 
         btnEliminarProducto.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/eliminar.png"))); // NOI18N
         btnEliminarProducto.setText("Eliminar");
+        btnEliminarProducto.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEliminarProductoActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel11Layout = new javax.swing.GroupLayout(jPanel11);
         jPanel11.setLayout(jPanel11Layout);
@@ -992,16 +1110,15 @@ public class Proyecto extends javax.swing.JFrame {
                     .addGroup(jPanel3Layout.createSequentialGroup()
                         .addGap(19, 19, 19)
                         .addComponent(jButton21))
-                    .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                            .addComponent(jTextField15, javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel24, javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel28, javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel25, javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jTextField19, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addComponent(jTextField16, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jLabel27)
-                        .addComponent(jTextField18, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                        .addComponent(jTextField15, javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(jLabel24, javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(jLabel28, javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(jLabel25, javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(jTextField19, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jTextField16, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel27)
+                    .addComponent(jTextField18, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(88, Short.MAX_VALUE))
         );
         jPanel3Layout.setVerticalGroup(
@@ -1093,23 +1210,29 @@ public class Proyecto extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+    private void btnProductosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnProductosActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jButton4ActionPerformed
+        LimpiarTable();
+        listarProductos();
+        jTabbedPane2.setSelectedIndex(3);
+    }//GEN-LAST:event_btnProductosActionPerformed
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void btnNuevaVentanaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNuevaVentanaActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jButton1ActionPerformed
+        LimpiarTable();
+        listarProductos();
+        jTabbedPane2.setSelectedIndex(0);
+    }//GEN-LAST:event_btnNuevaVentanaActionPerformed
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+    private void btnClientesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClientesActionPerformed
         LimpiarTable();
         listarClientes();
         jTabbedPane2.setSelectedIndex(1);
-    }//GEN-LAST:event_jButton2ActionPerformed
+    }//GEN-LAST:event_btnClientesActionPerformed
 
-    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
+    private void btnVentasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVentasActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jButton5ActionPerformed
+    }//GEN-LAST:event_btnVentasActionPerformed
 
     private void txtCodigoVentaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtCodigoVentaActionPerformed
         // TODO add your handling code here:
@@ -1177,6 +1300,21 @@ public class Proyecto extends javax.swing.JFrame {
 
     private void btnGuardarProveedorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarProveedorActionPerformed
         // TODO add your handling code here:
+        if (!"".equals(txtRazonSocialProveedor.getText()) || !"".equals(txtNitProveedor.getText()) || !"".equals(txtNombreProveedor.getText()) || !"".equals(txtTelefonoProveedor.getText()) || !"".equals(txtDireccionProveedor.getText())) 
+        {
+            pr.setNit(Integer.parseInt(txtNitProveedor.getText()));
+            pr.setTelefono(Integer.parseInt(txtTelefonoProveedor.getText()));
+            pr.setMateriaPrima((txtRazonSocialProveedor.getText()));
+            pr.setNombre(txtNombreProveedor.getText());
+            pr.setDireccion(txtDireccionProveedor.getText());
+            prdao.registrarProvedor(pr);
+            LimpiarTable();
+            ListarProveedor();
+        }
+        else{
+            JOptionPane.showMessageDialog(null, "los datos estan vacios");
+        }          
+        
     }//GEN-LAST:event_btnGuardarProveedorActionPerformed
 
     private void tableClienteMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tableClienteMouseClicked
@@ -1254,7 +1392,15 @@ public class Proyecto extends javax.swing.JFrame {
     private void btnFacturarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFacturarActionPerformed
         // TODO add your handling code here:
         RegistrarVenta();
+        RegistrarDetalle();
+        ActualizarStock();
         JOptionPane.showMessageDialog(null, "Factura registrada correctamente");
+        limpiarTableNvVenta();
+        txtCodigoVenta.requestFocus();
+        txtCedulaClienteVenta.setText("");
+        txtNombreClienteVenta.setText("");
+        jTextField1.setText("");
+        txtNombreVendedor.setText("");
 
     }//GEN-LAST:event_btnFacturarActionPerformed
 
@@ -1307,9 +1453,165 @@ public class Proyecto extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_txtCantidadVentaActionPerformed
 
+    private void txtNitProveedorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtNitProveedorActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtNitProveedorActionPerformed
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        // TODO add your handling code here:
+        LimpiarTable();
+        ListarProveedor();
+        jTabbedPane2.setSelectedIndex(2);
+    }//GEN-LAST:event_jButton3ActionPerformed
+
+    private void tableProveedorMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tableProveedorMouseClicked
+        // TODO add your handling code here:
+        
+        int fila = tableProveedor.rowAtPoint(evt.getPoint());
+        txtNitProveedor.setText(tableProveedor.getValueAt(fila,0).toString());
+        txtNombreProveedor.setText(tableProveedor.getValueAt(fila,1).toString());
+        txtTelefonoProveedor.setText(tableProveedor.getValueAt(fila,2).toString());
+        txtDireccionProveedor.setText(tableProveedor.getValueAt(fila,3).toString());
+        txtRazonSocialProveedor.setText(tableProveedor.getValueAt(fila,4).toString());
+    }//GEN-LAST:event_tableProveedorMouseClicked
+
+    private void btnEliminarProveedorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarProveedorActionPerformed
+        // TODO add your handling code here:
+       if(!"".equals(txtNitProveedor.getText()))
+        {
+            int pregunta=JOptionPane.showConfirmDialog(null,"Esta seguro que quiere eliminar");
+            if(pregunta==0){
+                int id= Integer.parseInt(txtNitProveedor.getText());
+                JOptionPane.showConfirmDialog(null,id);
+                prdao.eliminarProveedor(id);
+                LimpiarTable();
+                //limpiarcliente();
+                limpiarproveedor();
+                ListarProveedor();
+            }
+            
+        }else{
+                JOptionPane.showMessageDialog(null,"Seleccione un proveedor de la tabla");
+            }
+   
+    }//GEN-LAST:event_btnEliminarProveedorActionPerformed
+
+    private void btnActualizarProveedorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnActualizarProveedorActionPerformed
+       
+        if("".equals(txtNitProveedor.getText())){
+            JOptionPane.showMessageDialog(null,"seleccione fila");
+        }else{
+            pr.setNit(Integer.parseInt(txtNitProveedor.getText()));
+            pr.setTelefono(Integer.parseInt(txtTelefonoProveedor.getText()));
+            pr.setMateriaPrima((txtRazonSocialProveedor.getText()));
+            pr.setNombre((txtNombreProveedor.getText()));
+            pr.setDireccion((txtDireccionProveedor.getText()));
+             if (!"".equals(txtDireccionProveedor.getText()) || !"".equals(txtTelefonoProveedor.getText()) || !"".equals(txtRazonSocialProveedor.getText()) || !"".equals(txtNombreProveedor.getText())) {
+                prdao.ModificarProveedor(pr);
+                 LimpiarTable();
+                //limpiarcliente();
+                limpiarproveedor();
+                ListarProveedor();
+                     
+                 }
+             else{
+                 JOptionPane.showMessageDialog(null,"Campos Vacios");
+             }
+            
+        }
+    }//GEN-LAST:event_btnActualizarProveedorActionPerformed
+
+    private void tableProductoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tableProductoMouseClicked
+        // TODO add your handling code here:
+        int fila = tableProducto.rowAtPoint(evt.getPoint());
+        txtCodigoProducto.setText(tableProducto.getValueAt(fila,0).toString());
+        txtDescripcionProducto.setText(tableProducto.getValueAt(fila,1).toString());
+        cdxProveedorProducto.setSelectedItem(tableProducto.getValueAt(fila,2).toString());
+        txtCantidadProducto.setText(tableProducto.getValueAt(fila,3).toString());
+        txtPrecio.setText(tableProducto.getValueAt(fila,4).toString());
+        
+    }//GEN-LAST:event_tableProductoMouseClicked
+
+    private void btnEliminarProductoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarProductoActionPerformed
+        // TODO add your handling code here:
+                if(!"".equals(txtCodigoProducto.getText()))
+        {
+            int pregunta=JOptionPane.showConfirmDialog(null,"Esta seguro que quiere eliminar");
+            if(pregunta==0){
+                int id= Integer.parseInt(txtCodigoProducto.getText());
+                pdao.eliminarProducto(id);
+                LimpiarTable();
+                limpiarProductos();
+                listarProductos();
+            }
+        }
+    }//GEN-LAST:event_btnEliminarProductoActionPerformed
+
+    private void btnActualizarProductoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnActualizarProductoActionPerformed
+        // TODO add your handling code here:
+        if("".equals(txtCodigoProducto.getText())){
+            JOptionPane.showMessageDialog(null,"seleccione fila");
+        }else{
+            p.setId(Integer.parseInt(txtCodigoProducto.getText()));
+            p.setNombre(txtDescripcionProducto.getText());
+            p.setCantidad(Integer.parseInt(txtCantidadProducto.getText()));
+            p.setPrecio(Integer.parseInt(txtPrecio.getText()));
+            p.setProveedor(cdxProveedorProducto.getSelectedItem().toString());
+             if (!"".equals(txtDescripcionProducto.getText()) 
+                     || !"".equals(txtCantidadProducto.getText()) || !"".equals(txtPrecio.getText()) 
+                     || !"".equals(cdxProveedorProducto.getSelectedItem().toString())) {
+                pdao.ModificarProducto(p);
+                JOptionPane.showMessageDialog(null,"Producto modificado"); 
+                LimpiarTable();
+                limpiarProductos();
+                listarProductos();
+                    
+                 }
+             else{
+                 JOptionPane.showMessageDialog(null,"Campos Vacios");
+             }
+            
+        }
+    }//GEN-LAST:event_btnActualizarProductoActionPerformed
+
+    private void btnEliminarVentaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarVentaActionPerformed
+        // TODO add your handling code here:
+        modelo = (DefaultTableModel) tableNuevaVenta.getModel();
+        modelo.removeRow(tableNuevaVenta.getSelectedRow());
+        TotalPagar();
+        txtCodigoVenta.requestFocus();
+    }//GEN-LAST:event_btnEliminarVentaActionPerformed
+
+    private void txtCedulaClienteVentaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtCedulaClienteVentaActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtCedulaClienteVentaActionPerformed
+
+    private void txtCedulaClienteVentaKeyPressed(java.awt.event.KeyEvent evt) {                                                 
+        // TODO add your handling code here:
+        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
+            if (!"".equals(txtCedulaClienteVenta.getText())) {
+                int idCliente = Integer.parseInt(txtCedulaClienteVenta.getText());
+                cl = client.BuscarCliente(idCliente);
+                if (cl.getNombre() != null){
+                txtNombreClienteVenta.setText(""+cl.getNombre());
+                txtTelefonoClienteVenta.setText(""+cl.getTelefono());
+                txtDireccionClienteVenta.setText(""+cl.getDireccion());
+                txtRazonClienteVenta.setText(""+cl.getId());
+                } else {
+                    txtCedulaClienteVenta.setText("");
+                    JOptionPane.showMessageDialog(null,"Cliente no esta registrado");
+                }
+        }
+        }
+    } 
+    
+    
+    
+    
     /**
      * @param args the command line arguments
      */
+    
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
@@ -1346,6 +1648,7 @@ public class Proyecto extends javax.swing.JFrame {
     private javax.swing.JButton btnActualizarCliente;
     private javax.swing.JButton btnActualizarProducto;
     private javax.swing.JButton btnActualizarProveedor;
+    private javax.swing.JButton btnClientes;
     private javax.swing.JButton btnEliminarCliente;
     private javax.swing.JButton btnEliminarProducto;
     private javax.swing.JButton btnEliminarProveedor;
@@ -1354,14 +1657,13 @@ public class Proyecto extends javax.swing.JFrame {
     private javax.swing.JButton btnGuardarCliente;
     private javax.swing.JButton btnGuardarProducto;
     private javax.swing.JButton btnGuardarProveedor;
+    private javax.swing.JButton btnNuevaVentana;
     private javax.swing.JButton btnPdfVentas;
+    private javax.swing.JButton btnProductos;
+    private javax.swing.JButton btnVentas;
     private javax.swing.JComboBox<String> cdxProveedorProducto;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton21;
     private javax.swing.JButton jButton3;
-    private javax.swing.JButton jButton4;
-    private javax.swing.JButton jButton5;
     private javax.swing.JButton jButton6;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
@@ -1416,7 +1718,6 @@ public class Proyecto extends javax.swing.JFrame {
     private javax.swing.JLabel lblCedulaCliente;
     private javax.swing.JLabel lblCedulaClienteVenta;
     private javax.swing.JLabel lblNombreClienteVenta;
-    private javax.swing.JLabel lblTelefonoClienteVenta;
     private javax.swing.JLabel lblTotal;
     private javax.swing.JLabel lblTotalPagar;
     private javax.swing.JTable tableCliente;
@@ -1452,46 +1753,90 @@ public class Proyecto extends javax.swing.JFrame {
     private javax.swing.JTextField txtRazonSocialProveedor;
     private javax.swing.JTextField txtStockDisponible;
     private javax.swing.JTextField txtTelefonoCliente;
+    private javax.swing.JLabel txtTelefonoClienteVenta;
     private javax.swing.JTextField txtTelefonoProveedor;
     // End of variables declaration//GEN-END:variables
 
-private void limpiarcliente(){
-    txtIdCliente.setText("");
-    txtCedulaCliente.setText("");
-    txtNombreCliente.setText("");
-    txtTelefonoCliente.setText("");
-    txtDireccionCliente.setText("");
-    txtRazonSocialCliente.setText("");
-}
+    private void limpiarcliente(){
+        txtIdCliente.setText("");
+        txtCedulaCliente.setText("");
+        txtNombreCliente.setText("");
+        txtTelefonoCliente.setText("");
+        txtDireccionCliente.setText("");
+        txtRazonSocialCliente.setText("");
+    }
+    private void limpiarproveedor(){
+        txtNitProveedor.setText("");
+        txtRazonSocialProveedor.setText("");
+        txtNombreProveedor.setText("");
+        txtTelefonoProveedor.setText("");
+        txtDireccionProveedor.setText("");
+    }
+
+    private void limpiarProductos() {
+            txtCodigoProducto.setText("");
+            txtDescripcionProducto.setText("");
+            txtCantidadProducto.setText("");
+            txtPrecio.setText("");
+            cdxProveedorProducto.setSelectedItem(null);
+        }
 
 
-    private void TotalPagar() {
+
+   private void TotalPagar() {
         totalPagar = 0;
         int numFila = tableNuevaVenta.getRowCount();
         for (int i = 0; i < numFila; i++) {
             int cal = Integer.parseInt(String.valueOf(tableNuevaVenta.getModel().getValueAt(i, 4)));
             totalPagar = totalPagar + cal;
         }
-        lblTotalPagar.setText(String.format("", totalPagar));
+        lblTotalPagar.setText(String.format("%d", totalPagar));
     }
     
-    
+
 
     private void RegistrarVenta() {
-        String cliente = txtNombreClienteVenta.getText();
+  
         String vendedor = txtNombreVendedor.getText();
-        int idProducto = Integer.parseInt(txtCodigoVenta.getText());
-        int idVendedor = Integer.parseInt(jTextField1.getText());
-        int idCliente = Integer.parseInt(txtCedulaClienteVenta.getText());
-        //int cantidad = Integer.parseInt(txtCantidadVenta.getText());
+        String cliente = txtNombreClienteVenta.getText();
         int monto = totalPagar;
-        v.setNombre_cliente(cliente);
+ 
         v.setNombre_vendedor(vendedor);
+        v.setNombre_cliente(cliente);
         v.setPrecio_total(monto);
-        v.setId_producto(idProducto);
-        v.setId_vendedor(idVendedor);
-        v.setId_cliente(idCliente);
         vdao.RegistrarVenta(v);
+    }
+
+    private void RegistrarDetalle() {
+        int id = vdao.IdVenta();
+        for (int i = 0; i < tableNuevaVenta.getRowCount(); i++) {
+            int cod = Integer.parseInt(tableNuevaVenta.getValueAt(i, 0).toString());
+            int cantidad = Integer.parseInt(tableNuevaVenta.getValueAt(i, 2).toString());
+            int precio = Integer.parseInt(tableNuevaVenta.getValueAt(i, 3).toString());
+            Dv.setCod_pro(cod);
+            Dv.setCantidad(cantidad);
+            Dv.setPrecio(precio);
+            Dv.setId(id);
+            vdao.DetalleVenta(Dv);
+        }
+    }
+    
+    private void ActualizarStock(){
+        for (int i = 0; i < tableNuevaVenta.getRowCount(); i++) {
+            int codigo = Integer.parseInt(tableNuevaVenta.getValueAt(i, 0).toString());
+            int cantidad = Integer.parseInt(tableNuevaVenta.getValueAt(i, 2).toString());
+            p = pdao.BuscarProducto(codigo);
+            int stockActual = p.getCantidad() - cantidad;
+            vdao.ActualizarStock(stockActual, codigo);
+        }
+    }
+    
+    private void limpiarTableNvVenta(){
+        tmp = (DefaultTableModel) tableNuevaVenta.getModel();
+        int filas = tableNuevaVenta.getRowCount();
+        for (int i = 0; i < filas; i++){
+            tmp.removeRow(0);
+        }
     }
 
 

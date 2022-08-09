@@ -2,6 +2,11 @@
 <project-private xmlns="http://www.netbeans.org/ns/project-private/1">
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
-        <group/>
+        <group>
+            <file>file:/C:/Users/crisc/Documents/GitHub/ProgramacionInteractiva/PRODUCTOS%20SALUDABLES/DiseñoBackend/segundaparte/NewProject/src/ProjectView/Proyecto.java</file>
+            <file>file:/C:/Users/crisc/Documents/GitHub/ProgramacionInteractiva/PRODUCTOS%20SALUDABLES/DiseñoBackend/segundaparte/NewProject/src/Modelo/ClienteDao.java</file>
+            <file>file:/C:/Users/crisc/Documents/GitHub/ProgramacionInteractiva/PRODUCTOS%20SALUDABLES/DiseñoBackend/segundaparte/NewProject/src/Modelo/ProveedorDao.java</file>
+            <file>file:/C:/Users/crisc/Documents/GitHub/ProgramacionInteractiva/PRODUCTOS%20SALUDABLES/DiseñoBackend/segundaparte/NewProject/src/Modelo/Proveedor.java</file>
+        </group>
     </open-files>
 </project-private>
