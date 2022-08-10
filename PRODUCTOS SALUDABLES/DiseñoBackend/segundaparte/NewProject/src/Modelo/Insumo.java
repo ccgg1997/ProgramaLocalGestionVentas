@@ -11,20 +11,21 @@ package Modelo;
 public class Insumo {
     
     private int codigo;
-    private String nombre;
-    private int cantidad;
+    private int nit_proveedor;
+    private String nombre_insumo;
+    private int cantidad_insumo;
     private int precio;
-    private int id_proveedor;
+
 
     public Insumo() {
     }
 
-    public Insumo(int codigo, String nombre, int cantidad, int precio, int id_proveedor) {
+    public Insumo(int codigo, int nit_proveedor, String nombre_insumo, int cantidad_insumo, int precio) {
         this.codigo = codigo;
-        this.nombre = nombre;
-        this.cantidad = cantidad;
+        this.nit_proveedor = nit_proveedor;
+        this.nombre_insumo = nombre_insumo;
+        this.cantidad_insumo = cantidad_insumo;
         this.precio = precio;
-        this.id_proveedor = id_proveedor;
     }
 
     public int getCodigo() {
@@ -35,20 +36,28 @@ public class Insumo {
         this.codigo = codigo;
     }
 
-    public String getNombre() {
-        return nombre;
+    public int getNit_proveedor() {
+        return nit_proveedor;
     }
 
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
+    public void setNit_proveedor(int nit_proveedor) {
+        this.nit_proveedor = nit_proveedor;
     }
 
-    public int getCantidad() {
-        return cantidad;
+    public String getNombre_insumo() {
+        return nombre_insumo;
     }
 
-    public void setCantidad(int cantidad) {
-        this.cantidad = cantidad;
+    public void setNombre_insumo(String nombre_insumo) {
+        this.nombre_insumo = nombre_insumo;
+    }
+
+    public int getCantidad_insumo() {
+        return cantidad_insumo;
+    }
+
+    public void setCantidad_insumo(int cantidad_insumo) {
+        this.cantidad_insumo = cantidad_insumo;
     }
 
     public int getPrecio() {
@@ -59,14 +68,6 @@ public class Insumo {
         this.precio = precio;
     }
 
-    public int getId_proveedor() {
-        return id_proveedor;
-    }
-
-    public void setId_proveedor(int id_proveedor) {
-        this.id_proveedor = id_proveedor;
-    }
-    
     
     
 }

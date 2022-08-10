@@ -27,13 +27,13 @@ public class ClienteDao {
         try
         {
             con=   cn.iniciarconexion();
-            String sql="INSERT INTO public.\"Clientes\" (cedula,nombre,telefono,direccion,id) VALUES (?,?,?,?,?)";
+            String sql="INSERT INTO public.\"Clientes\" (id,nombre,telefono,direccion,cedula) VALUES (?,?,?,?,?)";
             ps = con.prepareStatement(sql);
-            ps.setInt(1,cl.getCedula());
+            ps.setInt(1,cl.getId());
             ps.setString(2,cl.getNombre());
             ps.setInt(3,cl.getTelefono());
             ps.setString(4,cl.getDireccion());
-            ps.setInt(5,cl.getId());
+            ps.setInt(5,cl.getCedula());
             ps.execute();
             JOptionPane.showMessageDialog(null, "Cliente Registrado");
         }
@@ -70,10 +70,10 @@ public class ClienteDao {
             {               
                Cliente cl = new Cliente();
                cl.setId(rs.getInt("id"));
-               cl.setCedula(rs.getInt("cedula"));
                cl.setNombre(rs.getString("nombre"));
                cl.setTelefono(rs.getInt("telefono"));
                cl.setDireccion(rs.getString("direccion"));
+               cl.setCedula(rs.getInt("cedula"));
                ListaC1.add(cl);
                //aux= rs.getString("nombre");
            }  

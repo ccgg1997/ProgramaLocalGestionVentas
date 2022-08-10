@@ -11,15 +11,29 @@ import Modelo.ProductoDao;
 import Modelo.Proveedor;
 import Modelo.ProveedorDao;
 import Modelo.Detalle;
+import Modelo.Eventos;
 import Modelo.Insumo;
 import Modelo.InsumoDao;
 import Modelo.Vendedor;
 import Modelo.VendedorDao;
 import Modelo.Venta;
 import Modelo.VentaDao;
+import Reportes.Excel;
+import com.itextpdf.text.Document;
+import com.itextpdf.text.DocumentException;
+import com.itextpdf.text.Image;
+import com.itextpdf.text.log.Level;
+import com.itextpdf.text.log.Logger;
+import static com.itextpdf.text.pdf.PdfObject.NULL;
+import com.itextpdf.text.pdf.PdfWriter;
+import java.awt.Desktop;
 import java.awt.event.KeyEvent;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
@@ -40,6 +54,7 @@ public class Proyecto extends javax.swing.JFrame {
     ClienteDao client = new ClienteDao();
     DefaultTableModel modelo=new DefaultTableModel();
     DefaultTableModel tmp =new DefaultTableModel();
+    Eventos event = new Eventos();
     Venta v = new Venta();
     VentaDao vdao = new VentaDao();
     Producto p = new Producto();
@@ -94,16 +109,16 @@ public class Proyecto extends javax.swing.JFrame {
     
      public void listarInsumos()
     {
-        List<Insumo> listarC1= inDao.listarInsumo();
+        List<Insumo> listarIn= inDao.listarInsumo();
         modelo= (DefaultTableModel)tableInsumos.getModel();
         Object[] ob= new Object[5];
-        for (int i=0; i<listarC1.size();i++)
+        for (int i=0; i<listarIn.size();i++)
         {
-            ob[0]=listarC1.get(i).getCodigo();
-            ob[2]=listarC1.get(i).getId_proveedor();
-            ob[1]=listarC1.get(i).getNombre();
-            ob[3]=listarC1.get(i).getCantidad();
-            ob[4]=listarC1.get(i).getPrecio();
+            ob[0]=listarIn.get(i).getCodigo();
+            ob[1]=listarIn.get(i).getNit_proveedor();
+            ob[2]=listarIn.get(i).getNombre_insumo();
+            ob[3]=listarIn.get(i).getCantidad_insumo();
+            ob[4]=listarIn.get(i).getPrecio();
             modelo.addRow(ob);
             
         }
@@ -167,6 +182,24 @@ public class Proyecto extends javax.swing.JFrame {
             modelo.addRow(ob);
         }
         tableProducto.setModel(modelo);
+    
+    }
+     
+     
+     public void listarVentas()
+    {
+        List<Venta> ListarVentas= vdao.listarVentas();
+        modelo= (DefaultTableModel)tableVentas.getModel();
+        Object[] ob= new Object[4];
+        for (int i=0; i<ListarVentas.size();i++)
+        {
+            ob[0]=ListarVentas.get(i).getNumero_factura();
+            ob[1]=ListarVentas.get(i).getNombre_vendedor();
+            ob[2]=ListarVentas.get(i).getNombre_cliente();
+            ob[3]=ListarVentas.get(i).getPrecio_total();
+            modelo.addRow(ob);
+        }
+        tableVentas.setModel(modelo);
     
     }
     
@@ -280,6 +313,7 @@ public class Proyecto extends javax.swing.JFrame {
         txtCodigoProducto = new javax.swing.JTextField();
         jLabel20 = new javax.swing.JLabel();
         jLabel21 = new javax.swing.JLabel();
+        jButton1 = new javax.swing.JButton();
         jPanel12 = new javax.swing.JPanel();
         jScrollPane6 = new javax.swing.JScrollPane();
         tableVentas = new javax.swing.JTable();
@@ -390,6 +424,11 @@ public class Proyecto extends javax.swing.JFrame {
 
         jButton6.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/config.png"))); // NOI18N
         jButton6.setText("Config");
+        jButton6.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton6ActionPerformed(evt);
+            }
+        });
 
         btnVendedor.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/facebook.png"))); // NOI18N
         btnVendedor.setText("Vendedor");
@@ -474,6 +513,9 @@ public class Proyecto extends javax.swing.JFrame {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 txtCodigoVentaKeyPressed(evt);
             }
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtCodigoVentaKeyTyped(evt);
+            }
         });
 
         txtCantidadVenta.addActionListener(new java.awt.event.ActionListener() {
@@ -484,6 +526,9 @@ public class Proyecto extends javax.swing.JFrame {
         txtCantidadVenta.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 txtCantidadVentaKeyPressed(evt);
+            }
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtCantidadVentaKeyTyped(evt);
             }
         });
 
@@ -524,6 +569,9 @@ public class Proyecto extends javax.swing.JFrame {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 txtCedulaClienteVentaKeyPressed(evt);
             }
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtCedulaClienteVentaKeyTyped(evt);
+            }
         });
 
         txtNombreClienteVenta.setEditable(false);
@@ -547,7 +595,8 @@ public class Proyecto extends javax.swing.JFrame {
             }
         });
 
-        jLabel8.setText("nombre");
+        jLabel8.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        jLabel8.setText("Nombre");
 
         txtNombreVendedor.setEditable(false);
 
@@ -555,9 +604,13 @@ public class Proyecto extends javax.swing.JFrame {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 txtIdVendedorKeyPressed(evt);
             }
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtIdVendedorKeyTyped(evt);
+            }
         });
 
-        jLabel12.setText("id vendedor ");
+        jLabel12.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        jLabel12.setText("Id Vendedor");
 
         lblTotalPagar.setText("-------");
 
@@ -568,19 +621,18 @@ public class Proyecto extends javax.swing.JFrame {
             .addGroup(jPanel8Layout.createSequentialGroup()
                 .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel8Layout.createSequentialGroup()
-                        .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel8Layout.createSequentialGroup()
                                 .addGap(38, 38, 38)
                                 .addComponent(jLabel2)
                                 .addGap(110, 110, 110)
-                                .addComponent(jLabel4)
-                                .addGap(123, 123, 123))
+                                .addComponent(jLabel4))
                             .addGroup(jPanel8Layout.createSequentialGroup()
                                 .addGap(26, 26, 26)
                                 .addComponent(txtCodigoVenta, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(txtDescripcionVenta, javax.swing.GroupLayout.PREFERRED_SIZE, 86, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(101, 101, 101)))
+                                .addGap(51, 51, 51)
+                                .addComponent(txtDescripcionVenta, javax.swing.GroupLayout.PREFERRED_SIZE, 157, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(59, 59, 59)
                         .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addGroup(jPanel8Layout.createSequentialGroup()
                                 .addComponent(txtCantidadVenta, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -660,9 +712,8 @@ public class Proyecto extends javax.swing.JFrame {
                     .addComponent(jLabel5, javax.swing.GroupLayout.Alignment.TRAILING))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(txtCodigoVenta, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(txtDescripcionVenta, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtDescripcionVenta, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtCodigoVenta, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(txtStockDisponible, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(txtPrecioVenta, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -723,16 +774,40 @@ public class Proyecto extends javax.swing.JFrame {
                 txtCedulaClienteActionPerformed(evt);
             }
         });
+        txtCedulaCliente.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtCedulaClienteKeyTyped(evt);
+            }
+        });
+
+        txtNombreCliente.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtNombreClienteKeyTyped(evt);
+            }
+        });
 
         txtTelefonoCliente.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtTelefonoClienteActionPerformed(evt);
             }
         });
+        txtTelefonoCliente.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                txtTelefonoClienteKeyPressed(evt);
+            }
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtTelefonoClienteKeyTyped(evt);
+            }
+        });
 
         txtRazonSocialCliente.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtRazonSocialClienteActionPerformed(evt);
+            }
+        });
+        txtRazonSocialCliente.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtRazonSocialClienteKeyTyped(evt);
             }
         });
 
@@ -901,6 +976,23 @@ public class Proyecto extends javax.swing.JFrame {
         txtNitProveedor.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtNitProveedorActionPerformed(evt);
+            }
+        });
+        txtNitProveedor.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtNitProveedorKeyTyped(evt);
+            }
+        });
+
+        txtNombreProveedor.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtNombreProveedorKeyTyped(evt);
+            }
+        });
+
+        txtTelefonoProveedor.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtTelefonoProveedorKeyTyped(evt);
             }
         });
 
@@ -1083,6 +1175,18 @@ public class Proyecto extends javax.swing.JFrame {
         jLabel38.setFont(new java.awt.Font("Segoe UI", 1, 36)); // NOI18N
         jLabel38.setText("PRODUCCIÓN");
 
+        txtDescripcionProducto.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtDescripcionProductoKeyTyped(evt);
+            }
+        });
+
+        txtCantidadProducto.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtCantidadProductoKeyTyped(evt);
+            }
+        });
+
         jLabel22.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         jLabel22.setText("Precio");
 
@@ -1094,6 +1198,12 @@ public class Proyecto extends javax.swing.JFrame {
 
         jLabel19.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         jLabel19.setText("Codigo");
+
+        txtCodigoProducto.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtCodigoProductoKeyTyped(evt);
+            }
+        });
 
         jLabel20.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         jLabel20.setText("Descripcion");
@@ -1148,6 +1258,14 @@ public class Proyecto extends javax.swing.JFrame {
                 .addGap(45, 45, 45))
         );
 
+        jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/excel.png"))); // NOI18N
+        jButton1.setText("Reporte");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel11Layout = new javax.swing.GroupLayout(jPanel11);
         jPanel11.setLayout(jPanel11Layout);
         jPanel11Layout.setHorizontalGroup(
@@ -1163,16 +1281,16 @@ public class Proyecto extends javax.swing.JFrame {
                         .addGroup(jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel11Layout.createSequentialGroup()
-                                .addComponent(btnGuardarProducto)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(btnActualizarProducto))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel11Layout.createSequentialGroup()
                                 .addGap(0, 0, Short.MAX_VALUE)
+                                .addComponent(cdxProveedorProducto, javax.swing.GroupLayout.PREFERRED_SIZE, 174, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel11Layout.createSequentialGroup()
                                 .addGroup(jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel11Layout.createSequentialGroup()
-                                        .addComponent(btnEliminarProducto)
-                                        .addGap(71, 71, 71))
-                                    .addComponent(cdxProveedorProducto, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 174, javax.swing.GroupLayout.PREFERRED_SIZE))))))
+                                    .addComponent(btnGuardarProducto)
+                                    .addComponent(btnEliminarProducto))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addGroup(jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(btnActualizarProducto, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 598, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -1199,9 +1317,11 @@ public class Proyecto extends javax.swing.JFrame {
                         .addGroup(jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(btnActualizarProducto)
                             .addComponent(btnGuardarProducto))
-                        .addGap(45, 45, 45)
-                        .addComponent(btnEliminarProducto)
-                        .addGap(54, 54, 54))
+                        .addGap(36, 36, 36)
+                        .addGroup(jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(btnEliminarProducto)
+                            .addComponent(jButton1))
+                        .addGap(63, 63, 63))
                     .addGroup(jPanel11Layout.createSequentialGroup()
                         .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 458, Short.MAX_VALUE)
                         .addContainerGap())))
@@ -1217,6 +1337,11 @@ public class Proyecto extends javax.swing.JFrame {
                 "ID", "Cliente", "Vendedor", "Total"
             }
         ));
+        tableVentas.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tableVentasMouseClicked(evt);
+            }
+        });
         jScrollPane6.setViewportView(tableVentas);
         if (tableVentas.getColumnModel().getColumnCount() > 0) {
             tableVentas.getColumnModel().getColumn(0).setPreferredWidth(20);
@@ -1226,8 +1351,17 @@ public class Proyecto extends javax.swing.JFrame {
         }
 
         btnPdfVentas.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/pdf.png"))); // NOI18N
+        btnPdfVentas.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnPdfVentasActionPerformed(evt);
+            }
+        });
 
-        txtIdVenta.setText("jTextField1");
+        txtIdVenta.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtIdVentaActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel12Layout = new javax.swing.GroupLayout(jPanel12);
         jPanel12.setLayout(jPanel12Layout);
@@ -1260,6 +1394,12 @@ public class Proyecto extends javax.swing.JFrame {
         jLabel24.setText("Nit");
 
         jLabel25.setText("Nombre");
+
+        jTextField18.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                jTextField18KeyTyped(evt);
+            }
+        });
 
         jLabel27.setText("Direccion");
 
@@ -1358,19 +1498,41 @@ public class Proyecto extends javax.swing.JFrame {
 
         lblCedulaVendedor.setText("Cedula");
 
+        txtCedulaVendedor.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtCedulaVendedorKeyTyped(evt);
+            }
+        });
+
         txtnombreVendedor.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtnombreVendedorActionPerformed(evt);
             }
         });
+        txtnombreVendedor.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtnombreVendedorKeyTyped(evt);
+            }
+        });
 
         lblNombreVendedor.setText("Nombre");
+
+        txtTelefonoVendedor.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtTelefonoVendedorKeyTyped(evt);
+            }
+        });
 
         lblTelefonoVendedor.setText("Telefono");
 
         txtJornadaVendedor.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtJornadaVendedorActionPerformed(evt);
+            }
+        });
+        txtJornadaVendedor.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtJornadaVendedorKeyTyped(evt);
             }
         });
 
@@ -1516,12 +1678,29 @@ public class Proyecto extends javax.swing.JFrame {
                 txtCodigoInsumosActionPerformed(evt);
             }
         });
+        txtCodigoInsumos.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtCodigoInsumosKeyTyped(evt);
+            }
+        });
+
+        txtNombreInsumos.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtNombreInsumosKeyTyped(evt);
+            }
+        });
 
         jLabel23.setText("Nombre");
 
         lbl.setText("Precio");
 
         lnbl2.setText("Cantidad");
+
+        txtCantidadInsumo.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtCantidadInsumoKeyTyped(evt);
+            }
+        });
 
         jLabel32.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
         jLabel32.setText("SIMULAR INSUMOS PARA LA SIGUIENTE CANTIDAD:");
@@ -1535,7 +1714,18 @@ public class Proyecto extends javax.swing.JFrame {
 
         jLabel40.setText("Id_prove");
 
+        txtid_proveedor.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtid_proveedorKeyTyped(evt);
+            }
+        });
+
         btnmodificarinsumo.setText("Modificar");
+        btnmodificarinsumo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnmodificarinsumoActionPerformed(evt);
+            }
+        });
 
         btningresarinsumo.setText("Ingresar");
         btningresarinsumo.addActionListener(new java.awt.event.ActionListener() {
@@ -1545,6 +1735,11 @@ public class Proyecto extends javax.swing.JFrame {
         });
 
         btneliminarinsumo.setText("Eliminar");
+        btneliminarinsumo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btneliminarinsumoActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel7Layout = new javax.swing.GroupLayout(jPanel7);
         jPanel7.setLayout(jPanel7Layout);
@@ -1644,14 +1839,30 @@ public class Proyecto extends javax.swing.JFrame {
                 .addContainerGap(168, Short.MAX_VALUE))
         );
 
+        jScrollPane7.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jScrollPane7MouseClicked(evt);
+            }
+        });
+        jScrollPane7.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                jScrollPane7KeyPressed(evt);
+            }
+        });
+
         tableInsumos.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
             new String [] {
-                "Codigo", "Nombre", "Id_Proveedor", "Cantidad", "Precio"
+                "Codigo", "Proveedor", "Nombre", "Cantidad", "Precio"
             }
         ));
+        tableInsumos.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tableInsumosMouseClicked(evt);
+            }
+        });
         jScrollPane7.setViewportView(tableInsumos);
 
         tablePrediccion.setModel(new javax.swing.table.DefaultTableModel(
@@ -1746,6 +1957,9 @@ public class Proyecto extends javax.swing.JFrame {
 
     private void btnVentasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnVentasActionPerformed
         // TODO add your handling code here:
+        jTabbedPane2.setSelectedIndex(4);
+        LimpiarTable();
+        listarVentas();
     }//GEN-LAST:event_btnVentasActionPerformed
 
     private void txtCodigoVentaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtCodigoVentaActionPerformed
@@ -1835,8 +2049,8 @@ public class Proyecto extends javax.swing.JFrame {
         // TODO add your handling code here:
         int fila = tableCliente.rowAtPoint(evt.getPoint());
         txtRazonSocialCliente.setText(tableCliente.getValueAt(fila,0).toString());
-        txtCedulaCliente.setText(tableCliente.getValueAt(fila,1).toString());
-        txtNombreCliente.setText(tableCliente.getValueAt(fila,2).toString());
+        txtCedulaCliente.setText(tableCliente.getValueAt(fila,2).toString());
+        txtNombreCliente.setText(tableCliente.getValueAt(fila,1).toString());
         txtTelefonoCliente.setText(tableCliente.getValueAt(fila,3).toString());
         txtDireccionCliente.setText(tableCliente.getValueAt(fila,4).toString());
       
@@ -1908,17 +2122,26 @@ public class Proyecto extends javax.swing.JFrame {
 
     private void btnFacturarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFacturarActionPerformed
         // TODO add your handling code here:
-        RegistrarVenta();
-        RegistrarDetalle();
-        ActualizarStock();
-        JOptionPane.showMessageDialog(null, "Factura registrada correctamente");
-        limpiarTableNvVenta();
-        txtCodigoVenta.requestFocus();
-        txtCedulaClienteVenta.setText("");
-        txtNombreClienteVenta.setText("");
-        txtIdVendedor.setText("");
-        txtNombreVendedor.setText("");
-        lblTotalPagar.setText("");
+        if (tableNuevaVenta.getRowCount() > 0) {
+            if (!"".equals(txtNombreClienteVenta.getText()) && !"".equals(txtNombreVendedor.getText())) {
+                RegistrarVenta();
+                RegistrarDetalle();
+                ActualizarStock();
+                JOptionPane.showMessageDialog(null, "Factura registrada correctamente");
+                limpiarTableNvVenta();
+                txtCodigoVenta.requestFocus();
+                txtCedulaClienteVenta.setText("");
+                txtNombreClienteVenta.setText("");
+                txtIdVendedor.setText("");
+                txtNombreVendedor.setText("");
+                lblTotalPagar.setText("");
+            } else {
+                JOptionPane.showMessageDialog(null, "Favor buscar cliente y vendedor");
+            }
+        } else {
+            JOptionPane.showMessageDialog(null, "No hay productos registrados");
+        }
+
     }//GEN-LAST:event_btnFacturarActionPerformed
 
     private void btnGuardarProductoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarProductoActionPerformed
@@ -1960,7 +2183,14 @@ public class Proyecto extends javax.swing.JFrame {
                     txtPrecioVenta.setText("");
                     txtStockDisponible.setText("");
                     txtCodigoVenta.requestFocus();
+                    JOptionPane.showMessageDialog(null, "Codigo de producto no registrado en inventario");
+                    txtCodigoVenta.setText("");
+                    txtCodigoVenta.requestFocus();
                 }
+            } else{
+//            JOptionPane.showMessageDialog(null,"Codigo de producto no registrado en inventario");
+//            txtCodigoVenta.setText("");
+//            txtCodigoVenta.requestFocus();
             }
         } else {
             //JOptionPane.showMessageDialog(null, "Ingrese el codigo del producto");
@@ -2001,7 +2231,7 @@ public class Proyecto extends javax.swing.JFrame {
             int pregunta=JOptionPane.showConfirmDialog(null,"Esta seguro que quiere eliminar");
             if(pregunta==0){
                 int id= Integer.parseInt(txtNitProveedor.getText());
-                JOptionPane.showConfirmDialog(null,id);
+                JOptionPane.showMessageDialog(null,"Proveedor eliminado");
                 prdao.eliminarProveedor(id);
                 LimpiarTable();
                 //limpiarcliente();
@@ -2045,9 +2275,8 @@ public class Proyecto extends javax.swing.JFrame {
         int fila = tableProducto.rowAtPoint(evt.getPoint());
         txtCodigoProducto.setText(tableProducto.getValueAt(fila,0).toString());
         txtDescripcionProducto.setText(tableProducto.getValueAt(fila,1).toString());
-        cdxProveedorProducto.setSelectedItem(tableProducto.getValueAt(fila,2).toString());
-        txtCantidadProducto.setText(tableProducto.getValueAt(fila,3).toString());
-        txtPrecio.setText(tableProducto.getValueAt(fila,4).toString());
+        txtCantidadProducto.setText(tableProducto.getValueAt(fila,2).toString());
+        txtPrecio.setText(tableProducto.getValueAt(fila,3).toString());
         
     }//GEN-LAST:event_tableProductoMouseClicked
 
@@ -2131,6 +2360,7 @@ public class Proyecto extends javax.swing.JFrame {
             if(pregunta==0){
                 int id= Integer.parseInt(txtCedulaVendedor.getText());
                 vrdao.eliminarVendedor(id);
+                JOptionPane.showMessageDialog(null,"Vendedor eliminado");
                 LimpiarTable();
                 limpiarVendedor();
                 listarVendedor();
@@ -2235,9 +2465,9 @@ public class Proyecto extends javax.swing.JFrame {
         if (!"".equals(txtCodigoInsumos.getText()) || !"".equals(txtid_proveedor.getText()) || !"".equals(txtNombreInsumos.getText()) || !"".equals(txtCantidadInsumo.getText()) || !"".equals(txtPrecioInsumo.getText())) 
         {
             in.setCodigo(Integer.parseInt(txtCodigoInsumos.getText()));
-            in.setId_proveedor(Integer.parseInt(txtid_proveedor.getText()));
-            in.setCantidad(Integer.parseInt(txtCantidadInsumo.getText()));
-            in.setNombre(txtNombreProveedor.getText());
+            in.setNit_proveedor(Integer.parseInt(txtid_proveedor.getText()));
+            in.setNombre_insumo(txtNombreInsumos.getText());
+            in.setCantidad_insumo(Integer.parseInt(txtCantidadInsumo.getText()));
             in.setPrecio(Integer.parseInt(txtPrecioInsumo.getText()));
             inDao.RegistrarInsumo(in);
             LimpiarTable();
@@ -2251,7 +2481,6 @@ public class Proyecto extends javax.swing.JFrame {
     private void btnInsumoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInsumoActionPerformed
         // TODO add your handling code here:
         LimpiarTable();
-        JOptionPane.showMessageDialog(null, "Holi1");
         listarInsumos();
         jTabbedPane2.setSelectedIndex(7);
         
@@ -2260,6 +2489,228 @@ public class Proyecto extends javax.swing.JFrame {
     private void txtCodigoInsumosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtCodigoInsumosActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtCodigoInsumosActionPerformed
+
+    private void jScrollPane7KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jScrollPane7KeyPressed
+        // TODO add your handling code here:
+        
+       
+    }//GEN-LAST:event_jScrollPane7KeyPressed
+
+    private void jScrollPane7MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jScrollPane7MouseClicked
+        // TODO add your handling code here:
+        
+    }//GEN-LAST:event_jScrollPane7MouseClicked
+
+    private void tableInsumosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tableInsumosMouseClicked
+        // TODO add your handling code here:
+        int fila = tableInsumos.rowAtPoint(evt.getPoint());
+        txtCodigoInsumos.setText(tableInsumos.getValueAt(fila,0).toString());
+        txtNombreInsumos.setText(tableInsumos.getValueAt(fila,2).toString());
+        txtid_proveedor.setText(tableInsumos.getValueAt(fila,1).toString());
+        txtCantidadInsumo.setText(tableInsumos.getValueAt(fila,3).toString());
+        txtPrecioInsumo.setText(tableInsumos.getValueAt(fila,4).toString());
+    }//GEN-LAST:event_tableInsumosMouseClicked
+
+    private void btnmodificarinsumoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnmodificarinsumoActionPerformed
+        // TODO add your handling code here:
+        if("".equals(txtCodigoInsumos.getText())){
+            JOptionPane.showMessageDialog(null,"seleccione fila");
+        }else{
+            in.setCodigo(Integer.parseInt(txtCodigoInsumos.getText()));
+            in.setNit_proveedor(Integer.parseInt(txtid_proveedor.getText()));
+            in.setNombre_insumo(txtNombreInsumos.getText());
+            in.setCantidad_insumo(Integer.parseInt(txtCantidadInsumo.getText()));
+            in.setPrecio(Integer.parseInt(txtPrecioInsumo.getText()));
+            System.out.println(txtCodigoInsumos.getText()+" prueba de codigo");
+            System.out.println(txtid_proveedor.getText()+" prueba de proveedor");
+            System.out.println(txtNombreInsumos.getText()+" prueba de nombre");
+            System.out.println(txtCantidadInsumo.getText()+" prueba de cantidad");
+            System.out.println(txtPrecioInsumo.getText()+" prueba de precio");
+             if (!"".equals(txtid_proveedor.getText()) || !"".equals(txtNombreInsumos.getText()) || !"".equals(txtCantidadInsumo.getText()) || !"".equals(txtPrecioInsumo.getText())) {
+               inDao.ModificarInsumo(in);
+                 LimpiarTable();
+                //limpiarcliente();
+                listarInsumos();
+                limpiarInsumos();
+                 }
+             else{
+                 JOptionPane.showMessageDialog(null,"Campos Vacios");
+             }
+            
+        }
+          
+    }//GEN-LAST:event_btnmodificarinsumoActionPerformed
+
+    private void btneliminarinsumoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btneliminarinsumoActionPerformed
+        // TODO add your handling code here:
+        if(!"".equals(txtCodigoInsumos.getText()))
+        {
+            int pregunta=JOptionPane.showConfirmDialog(null,"Esta seguro que quiere eliminar");
+            if(pregunta==0){
+                int codigo= Integer.parseInt(txtCodigoInsumos.getText());
+                inDao.eliminarInsumo(codigo);
+                JOptionPane.showMessageDialog(null,"Insumo eliminado");
+                LimpiarTable();
+                limpiarInsumos();
+                listarInsumos();
+            }
+            
+        }else{
+                JOptionPane.showMessageDialog(null,"Seleccione un proveedor de la tabla");
+            }
+    }//GEN-LAST:event_btneliminarinsumoActionPerformed
+
+    private void txtCodigoVentaKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCodigoVentaKeyTyped
+        // TODO add your handling code here:
+        event.soloNumeros(evt);
+    }//GEN-LAST:event_txtCodigoVentaKeyTyped
+
+    private void txtCedulaClienteVentaKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCedulaClienteVentaKeyTyped
+        // TODO add your handling code here:
+        event.soloNumeros(evt);
+    }//GEN-LAST:event_txtCedulaClienteVentaKeyTyped
+
+    private void txtIdVendedorKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtIdVendedorKeyTyped
+        // TODO add your handling code here:
+        event.soloNumeros(evt);
+    }//GEN-LAST:event_txtIdVendedorKeyTyped
+
+    private void txtCantidadVentaKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCantidadVentaKeyTyped
+        // TODO add your handling code here:
+        event.soloNumeros(evt);
+    }//GEN-LAST:event_txtCantidadVentaKeyTyped
+
+    private void txtCedulaClienteKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCedulaClienteKeyTyped
+        // TODO add your handling code here:
+        event.soloNumeros(evt);
+    }//GEN-LAST:event_txtCedulaClienteKeyTyped
+
+    private void txtTelefonoClienteKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtTelefonoClienteKeyPressed
+        // TODO add your handling code here:
+        event.soloNumeros(evt);
+    }//GEN-LAST:event_txtTelefonoClienteKeyPressed
+
+    private void txtRazonSocialClienteKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtRazonSocialClienteKeyTyped
+        // TODO add your handling code here:
+        event.soloNumeros(evt);
+    }//GEN-LAST:event_txtRazonSocialClienteKeyTyped
+
+    private void txtNitProveedorKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNitProveedorKeyTyped
+        // TODO add your handling code here:
+        event.soloNumeros(evt);
+    }//GEN-LAST:event_txtNitProveedorKeyTyped
+
+    private void txtTelefonoProveedorKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtTelefonoProveedorKeyTyped
+        // TODO add your handling code here:
+        event.soloNumeros(evt);
+    }//GEN-LAST:event_txtTelefonoProveedorKeyTyped
+
+    private void txtCodigoProductoKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCodigoProductoKeyTyped
+        // TODO add your handling code here:
+        event.soloNumeros(evt);
+    }//GEN-LAST:event_txtCodigoProductoKeyTyped
+
+    private void txtCantidadProductoKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCantidadProductoKeyTyped
+        // TODO add your handling code here:
+        event.soloNumeros(evt);
+    }//GEN-LAST:event_txtCantidadProductoKeyTyped
+
+    private void txtCedulaVendedorKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCedulaVendedorKeyTyped
+        // TODO add your handling code here:
+        event.soloNumeros(evt);
+    }//GEN-LAST:event_txtCedulaVendedorKeyTyped
+
+    private void txtTelefonoVendedorKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtTelefonoVendedorKeyTyped
+        // TODO add your handling code here:
+        event.soloNumeros(evt);
+    }//GEN-LAST:event_txtTelefonoVendedorKeyTyped
+
+    private void txtTelefonoClienteKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtTelefonoClienteKeyTyped
+        // TODO add your handling code here:
+         event.soloNumeros(evt);
+    }//GEN-LAST:event_txtTelefonoClienteKeyTyped
+
+    private void txtCodigoInsumosKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCodigoInsumosKeyTyped
+        // TODO add your handling code here:
+         event.soloNumeros(evt);
+    }//GEN-LAST:event_txtCodigoInsumosKeyTyped
+
+    private void txtid_proveedorKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtid_proveedorKeyTyped
+        // TODO add your handling code here:
+         event.soloNumeros(evt);
+    }//GEN-LAST:event_txtid_proveedorKeyTyped
+
+    private void txtCantidadInsumoKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCantidadInsumoKeyTyped
+        // TODO add your handling code here:
+         event.soloNumeros(evt);
+    }//GEN-LAST:event_txtCantidadInsumoKeyTyped
+
+    private void txtNombreClienteKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNombreClienteKeyTyped
+        // TODO add your handling code here:
+        event.soloCaracteres(evt);
+    }//GEN-LAST:event_txtNombreClienteKeyTyped
+
+    private void txtNombreProveedorKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNombreProveedorKeyTyped
+        // TODO add your handling code here:
+        event.soloCaracteres(evt);
+    }//GEN-LAST:event_txtNombreProveedorKeyTyped
+
+    private void txtDescripcionProductoKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtDescripcionProductoKeyTyped
+        // TODO add your handling code here:
+        event.soloCaracteres(evt);
+    }//GEN-LAST:event_txtDescripcionProductoKeyTyped
+
+    private void jTextField18KeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField18KeyTyped
+        // TODO add your handling code here:
+        event.soloCaracteres(evt);
+    }//GEN-LAST:event_jTextField18KeyTyped
+
+    private void txtnombreVendedorKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtnombreVendedorKeyTyped
+        // TODO add your handling code here:
+        event.soloCaracteres(evt);
+    }//GEN-LAST:event_txtnombreVendedorKeyTyped
+
+    private void txtJornadaVendedorKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtJornadaVendedorKeyTyped
+        // TODO add your handling code here:
+        event.soloCaracteres(evt);
+    }//GEN-LAST:event_txtJornadaVendedorKeyTyped
+
+    private void txtNombreInsumosKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNombreInsumosKeyTyped
+        // TODO add your handling code here:
+        event.soloCaracteres(evt);
+    }//GEN-LAST:event_txtNombreInsumosKeyTyped
+
+    private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
+        // TODO add your handling code here:
+         jTabbedPane2.setSelectedIndex(5);
+    }//GEN-LAST:event_jButton6ActionPerformed
+
+    private void txtIdVentaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtIdVentaActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtIdVentaActionPerformed
+
+    private void tableVentasMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tableVentasMouseClicked
+        // TODO add your handling code here:
+         int fila = tableVentas.rowAtPoint(evt.getPoint());
+        txtIdVenta.setText(tableVentas.getValueAt(fila,0).toString()); 
+    }//GEN-LAST:event_tableVentasMouseClicked
+
+    private void btnPdfVentasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPdfVentasActionPerformed
+//        try {
+//            int num_factura = Integer.parseInt(txtIdVenta.getText());
+//
+//            File ruta = new File("src\\Pdf"+num_factura+".pdf");
+//            Desktop.getDesktop().open(ruta);
+//        } catch (IOException ex) {
+//            java.util.logging.Logger.getLogger(Proyecto.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+//        }
+//
+    }//GEN-LAST:event_btnPdfVentasActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        // TODO add your handling code here:
+        Excel.reporte();
+    }//GEN-LAST:event_jButton1ActionPerformed
 
     
     
@@ -2326,6 +2777,7 @@ public class Proyecto extends javax.swing.JFrame {
     private javax.swing.JButton btningresarinsumo;
     private javax.swing.JButton btnmodificarinsumo;
     private javax.swing.JComboBox<String> cdxProveedorProducto;
+    private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton21;
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton6;
@@ -2491,6 +2943,14 @@ public class Proyecto extends javax.swing.JFrame {
         
     }
 
+      private void limpiarInsumos(){
+        txtCodigoInsumos.setText("");
+        txtNombreInsumos.setText("");
+        txtid_proveedor.setText("");
+        txtCantidadInsumo.setText("");
+        txtPrecioInsumo.setText("");
+        
+    }
 
    private void TotalPagar() {
         totalPagar = 0;
@@ -2555,7 +3015,26 @@ public class Proyecto extends javax.swing.JFrame {
             tmp.removeRow(0);
         }
     }
+    
+//    private void pdf() throws FileNotFoundException, DocumentException{ 
+//    try{
+//            FileOutputStream archivo;
+//            File file = new File("src\\Pdf\\venta.pdf");
+//            archivo = new FileOutputStream(file);
+//            Document doc = new Document();
+//            PdfWriter.getInstance(doc, archivo);
+//            doc.open();
+//            Image img = new Image.getInstance("\"src\\\\Pdf\\\\venta.pdf\"");
+//            
+//            doc.close();
+//            archivo.close();
+//        }
+//        catch(SQLException e){
+//            System.out.println(e.toString());
+//            return true;
+//        }
+//    } 
 
-
+ 
 
 }

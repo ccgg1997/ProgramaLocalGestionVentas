@@ -31,17 +31,17 @@ public class InsumoDao {
     PreparedStatement ps;
     ResultSet rs;
     
-    public boolean RegistrarInsumo(Insumo cl){
+    public boolean RegistrarInsumo(Insumo in){
         try
         {
             con=   cn.iniciarconexion();
-            String sql="INSERT INTO public.\"InventarioInsumos\" (codigo,nit_proveedor,nombre_insumo,precio,cantidad_insumo) VALUES (?,?,?,?,?)";
+            String sql="INSERT INTO public.\"InventarioInsumos\" (codigo,nit_proveedor,nombre_insumo,cantidad_insumo,precio) VALUES (?,?,?,?,?)";
             ps = con.prepareStatement(sql);
-            ps.setInt(1,cl.getCodigo());
-            ps.setString(3,cl.getNombre());
-            ps.setInt(4,cl.getPrecio());
-            ps.setInt(2,cl.getId_proveedor());
-            ps.setInt(5,cl.getCantidad());
+            ps.setInt(1,in.getCodigo());
+             ps.setInt(2,in.getNit_proveedor());
+            ps.setString(3, in.getNombre_insumo());
+            ps.setInt(4,in.getCantidad_insumo());
+            ps.setInt(5, in.getPrecio());
             ps.execute();
             JOptionPane.showMessageDialog(null, "Insumo Registrado");
         }
@@ -74,28 +74,88 @@ public class InsumoDao {
         {
             con= cn.iniciarconexion();
             ps=con.prepareStatement(sql);
-            rs= ps.executeQuery();
-            
-            while(rs.next()) 
-            {               
-               Insumo in = new Insumo();
-               in.setCodigo(rs.getInt("codigo"));
-               in.setCantidad(rs.getInt("cantidad_insumo"));
-               in.setNombre(rs.getString("nombre_insumo"));
-               in.setPrecio(rs.getInt("precio"));
-               in.setId_proveedor(rs.getInt("nit_proveedor"));
-               ListaC.add(in);
-               //aux= rs.getString("nombre");
-           }  
+            rs = ps.executeQuery();
+
+            while (rs.next()) {
+                Insumo in = new Insumo();
+                in.setCodigo(rs.getInt("codigo"));
+                in.setNit_proveedor(rs.getInt("nit_proveedor"));
+                in.setNombre_insumo(rs.getString("nombre_insumo"));
+                in.setCantidad_insumo(rs.getInt("cantidad_insumo"));
+                in.setPrecio(rs.getInt("precio"));
+                ListaC.add(in);
+                //aux= rs.getString("nombre");
+            }
             //PRUEBA PARA VERIFICAR LA CONEXION CON LA BASE DE DATOS
             //JOptionPane.showMessageDialog(null,aux);
-        }
-        
-        catch(SQLException e)
-        {
+        } catch (SQLException e) {
             System.out.println(e.toString());
-            
+
         }
         return ListaC;
     }
+    
+     public boolean eliminarInsumo(int codigo)
+    {
+        String sql= "DELETE FROM public.\"InventarioInsumos\" WHERE codigo=?";
+        try{
+            
+            ps=con.prepareStatement(sql);
+            ps.setInt(1,codigo);
+            ps.execute();
+            return true;
+        }
+        catch(SQLException e){
+            System.out.println(e.toString());
+            return true;
+        }
+        finally{
+            try
+            {
+              con.close();  
+            }
+            catch(SQLException e){
+                System.out.println(e.toString());
+            }
+        }
+        
+    }    
+
+
+      public boolean ModificarInsumo(Insumo in){
+        String sql="UPDATE public.\"InventarioInsumos\" SET  nit_proveedor=?,nombre_insumo=?,cantidad_insumo=?,precio=? WHERE codigo=?";
+        try{ 
+            con= cn.iniciarconexion();
+            ps=con.prepareStatement(sql);
+            
+            ps.setInt(1,in.getNit_proveedor());
+            ps.setString(2, in.getNombre_insumo());
+            ps.setInt(3,in.getCantidad_insumo());
+            ps.setInt(4, in.getPrecio());
+            ps.setInt(5,in.getCodigo());
+            JOptionPane.showMessageDialog(null, "Insumo modificado");
+            ps.execute();
+            return true;
+            
+            
+        }
+        catch(SQLException e){
+            JOptionPane.showMessageDialog(null, e.toString());
+            return false;
+        
+        }finally{
+            try{
+                con.close();
+                
+            }
+            catch(SQLException ex){
+                JOptionPane.showMessageDialog(null, "Código :" + ex.getErrorCode()
+                        + "\n " + ex.getMessage());
+            }
+            
+        }
+        
+    }
+    
+
 }

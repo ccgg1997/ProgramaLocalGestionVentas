@@ -34,7 +34,7 @@ public class ProveedorDao {
             ps.setString(4,pr.getDireccion());
             ps.setString(2,pr.getMateriaPrima());
             ps.execute();
-            JOptionPane.showMessageDialog(null, "Cliente Registrado");
+            JOptionPane.showMessageDialog(null, "Proveedor Registrado");
             return true;
         }
         catch(SQLException e){
@@ -127,7 +127,7 @@ public class ProveedorDao {
             ps.setString(3,pr.getDireccion());
             ps.setString(4, pr.getMateriaPrima());
             ps.setInt(5, pr.getNit());
-            JOptionPane.showMessageDialog(null, pr.getNit());
+            JOptionPane.showMessageDialog(null, "Proveedor modificado");
             ps.execute();
             return true;
             

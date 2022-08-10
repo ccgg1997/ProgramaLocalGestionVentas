@@ -36,7 +36,7 @@ public class VendedorDao {
             ps.setString(5,pr.getDireccion());
             ps.setString(4,pr.getJornada());
             ps.execute();
-            JOptionPane.showMessageDialog(null, "Cliente Registrado");
+            JOptionPane.showMessageDialog(null, "Vendedor Registrado");
             return true;
         }
         catch(SQLException e){
@@ -130,7 +130,7 @@ public class VendedorDao {
             ps.setString(3,pr.getDireccion());
             ps.setString(4, pr.getJornada());
             ps.setInt(5, pr.getCedula());
-            JOptionPane.showMessageDialog(null, pr.getCedula());
+            JOptionPane.showMessageDialog(null, "Vendedor modificado");
             ps.execute();
             return true;
             

@@ -9,8 +9,10 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.ResultSet;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import javax.swing.JOptionPane;
 import java.util.Date;
+import java.util.List;
 
 /**
  *
@@ -130,4 +132,59 @@ public class VentaDao {
         
     
     }
+    
+    public List listarVentas()
+    {
+        List <Venta> ListaVenta= new ArrayList();
+        String sql="SELECT * FROM public.\"Venta\" ";
+        String aux="";
+        try
+        {
+            con= cn.iniciarconexion();
+            ps=con.prepareStatement(sql);
+            rs= ps.executeQuery();
+            while (rs.next()) 
+            {               
+               Venta venta = new Venta();
+               venta.setNumero_factura(rs.getInt("numero_factura"));
+               venta.setNombre_vendedor(rs.getString("nombre_vendedor"));
+               venta.setNombre_cliente(rs.getString("nombre_cliente"));
+               venta.setPrecio_total(rs.getInt("precio_total"));
+               ListaVenta.add(venta);
+               
+           } 
+        }
+        catch(SQLException e)
+        {
+            System.out.println(e.toString());
+            
+        }
+        return ListaVenta;
+    }
+    
+        public boolean eliminarProducto(int id)
+    {
+        String sql= "DELETE FROM public.\"Producto\" WHERE id=?";
+        try{
+            ps=con.prepareStatement(sql);
+            ps.setInt(1,id);
+            ps.execute();
+            return true;
+        }
+        catch(SQLException e){
+            System.out.println(e.toString());
+            return true;
+        }
+        finally{
+            try
+            {
+              con.close();  
+            }
+            catch(SQLException e){
+                System.out.println(e.toString());
+            }
+        }
+        
+    }
+
 }
