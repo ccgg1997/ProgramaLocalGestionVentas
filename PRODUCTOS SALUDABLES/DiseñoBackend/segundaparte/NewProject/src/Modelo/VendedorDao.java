@@ -120,7 +120,8 @@ public class VendedorDao {
 
       public boolean ModificarVendedor(Vendedor pr){
         String sql="UPDATE public.\"Vendedor\" SET  nombre=?,telefono=?,direccion=?,jornada=? WHERE id=?";
-        try{ 
+        try{
+            
             con= cn.iniciarconexion();
             ps=con.prepareStatement(sql);
             
@@ -153,8 +154,31 @@ public class VendedorDao {
         
     }
     
+      public Vendedor BuscarVendedor(int id) {
+        Vendedor pr = new Vendedor(); 
+        String sql = "SELECT * FROM public.\"Vendedor\" WHERE id = ?";
+        
+        try {
+            con = cn.iniciarconexion();
+            ps = con.prepareStatement(sql);
+            ps.setInt(1, id);
+            rs = ps.executeQuery();
+            if (rs.next()) {
+
+                pr.setNombre(rs.getString("nombre"));
+                pr.setTelefono(rs.getInt("telefono"));
+                pr.setJornada(rs.getString("jornada"));
+                pr.setDireccion(rs.getString("direccion"));
+
+            }
+
+         } catch (SQLException e) {
+            System.out.println(e.toString());
+
+        }
+        return pr;
+    }
     
     
-    
-    
+   
 }

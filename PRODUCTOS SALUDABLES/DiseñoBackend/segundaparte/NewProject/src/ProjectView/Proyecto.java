@@ -35,6 +35,7 @@ public class Proyecto extends javax.swing.JFrame {
     VendedorDao vrdao= new VendedorDao();
     ClienteDao client = new ClienteDao();
     DefaultTableModel modelo=new DefaultTableModel();
+    DefaultTableModel tmp =new DefaultTableModel();
     Venta v = new Venta();
     VentaDao vdao = new VentaDao();
     Producto p = new Producto();
@@ -42,7 +43,6 @@ public class Proyecto extends javax.swing.JFrame {
     Proveedor pr=new Proveedor();
     ProveedorDao prdao= new ProveedorDao();
     Detalle Dv = new Detalle();
-    DefaultTableModel tmp =new DefaultTableModel();
     int item;
     int totalPagar = 0;
 
@@ -199,7 +199,7 @@ public class Proyecto extends javax.swing.JFrame {
         txtIdNuevaVentaProducto = new javax.swing.JTextField();
         jLabel8 = new javax.swing.JLabel();
         txtNombreVendedor = new javax.swing.JTextField();
-        jTextField1 = new javax.swing.JTextField();
+        txtIdVendedor = new javax.swing.JTextField();
         jLabel12 = new javax.swing.JLabel();
         lblTotalPagar = new javax.swing.JLabel();
         jPanel9 = new javax.swing.JPanel();
@@ -464,6 +464,13 @@ public class Proyecto extends javax.swing.JFrame {
                 txtCedulaClienteVentaActionPerformed(evt);
             }
         });
+        txtCedulaClienteVenta.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                txtCedulaClienteVentaKeyPressed(evt);
+            }
+        });
+
+        txtNombreClienteVenta.setEditable(false);
 
         txtTelefonoClienteVenta.setText("Telefono");
 
@@ -485,6 +492,14 @@ public class Proyecto extends javax.swing.JFrame {
         });
 
         jLabel8.setText("nombre");
+
+        txtNombreVendedor.setEditable(false);
+
+        txtIdVendedor.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                txtIdVendedorKeyPressed(evt);
+            }
+        });
 
         jLabel12.setText("id vendedor ");
 
@@ -550,7 +565,7 @@ public class Proyecto extends javax.swing.JFrame {
                                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                                 .addComponent(txtTelefonoClienteVenta, javax.swing.GroupLayout.PREFERRED_SIZE, 12, javax.swing.GroupLayout.PREFERRED_SIZE))
                                             .addGroup(jPanel8Layout.createSequentialGroup()
-                                                .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addComponent(txtIdVendedor, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE)
                                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                                 .addComponent(txtNombreVendedor, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE)))
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -624,7 +639,7 @@ public class Proyecto extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(txtNombreVendedor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtIdVendedor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(14, 14, 14))
         );
 
@@ -979,14 +994,12 @@ public class Proyecto extends javax.swing.JFrame {
         jLabel23.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         jLabel23.setText("Proveedor");
 
-        cdxProveedorProducto.setEditable(true);
-
         tableProducto.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
             new String [] {
-                "Codigo", "Descripcion", "Cantidad", "Precio", "Proveedor"
+                "Codigo", "Descripcion", "Proveedor", "Cantidad", "Precio"
             }
         ));
         tableProducto.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -998,9 +1011,9 @@ public class Proyecto extends javax.swing.JFrame {
         if (tableProducto.getColumnModel().getColumnCount() > 0) {
             tableProducto.getColumnModel().getColumn(0).setPreferredWidth(50);
             tableProducto.getColumnModel().getColumn(1).setPreferredWidth(100);
-            tableProducto.getColumnModel().getColumn(2).setPreferredWidth(40);
-            tableProducto.getColumnModel().getColumn(3).setPreferredWidth(50);
-            tableProducto.getColumnModel().getColumn(4).setPreferredWidth(60);
+            tableProducto.getColumnModel().getColumn(2).setPreferredWidth(60);
+            tableProducto.getColumnModel().getColumn(3).setPreferredWidth(40);
+            tableProducto.getColumnModel().getColumn(4).setPreferredWidth(50);
         }
 
         btnGuardarProducto.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Img/GuardarTodo.png"))); // NOI18N
@@ -1597,7 +1610,7 @@ public class Proyecto extends javax.swing.JFrame {
                 int stock = Integer.parseInt(txtStockDisponible.getText());
                 if (stock >= cantidad) {
                     item = item + 1;
-                    modelo = (DefaultTableModel) tableNuevaVenta.getModel();
+                    DefaultTableModel tmp = (DefaultTableModel) tableNuevaVenta.getModel();
                     for (int i = 0; i < tableNuevaVenta.getRowCount(); i++) {
                         if (tableNuevaVenta.getValueAt(i, 1).equals(txtDescripcionVenta.getText())) {
                             JOptionPane.showMessageDialog(null, "Producto ya ha sido registrado");
@@ -1618,11 +1631,14 @@ public class Proyecto extends javax.swing.JFrame {
                     O[3] = lista.get(4);
                     O[4] = lista.get(5);
 
-                    modelo.addRow(O);
-                    tableNuevaVenta.setModel(modelo);
+                    tmp.addRow(O);
+                    tableNuevaVenta.setModel(tmp);
                     TotalPagar();
+                    limpiarVenta();
+                    txtCodigoVenta.requestFocus();
                 } else {
                     JOptionPane.showMessageDialog(null, "Stock no disponible");
+                    txtCantidadVenta.setText("");
                 }
             } else {
                 JOptionPane.showMessageDialog(null, "Ingrese cantidad");
@@ -1640,9 +1656,9 @@ public class Proyecto extends javax.swing.JFrame {
         txtCodigoVenta.requestFocus();
         txtCedulaClienteVenta.setText("");
         txtNombreClienteVenta.setText("");
-        jTextField1.setText("");
+        txtIdVendedor.setText("");
         txtNombreVendedor.setText("");
-
+        lblTotalPagar.setText("");
     }//GEN-LAST:event_btnFacturarActionPerformed
 
     private void btnGuardarProductoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarProductoActionPerformed
@@ -1657,12 +1673,15 @@ public class Proyecto extends javax.swing.JFrame {
                 p.setPrecio(Integer.parseInt(txtPrecio.getText()));
                 p.setProveedor(cdxProveedorProducto.getSelectedItem().toString());
                 pdao.RegistrarProductos(p);
+                LimpiarTable();
+                limpiarProductos();
+                listarProductos();
+                JOptionPane.showMessageDialog(null, "Producto registrado correctamente");
 
             } else {
                 JOptionPane.showMessageDialog(null, "Los campos estan vacios");
             }
-        }             JOptionPane.showMessageDialog(null, "Producto registrado correctamente");
-        // TO
+        }             
     }//GEN-LAST:event_btnGuardarProductoActionPerformed
 
     private void txtCodigoVentaKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCodigoVentaKeyPressed
@@ -1912,25 +1931,43 @@ public class Proyecto extends javax.swing.JFrame {
         
     }//GEN-LAST:event_tableVendedorMouseClicked
 
-    private void txtCedulaClienteVentaKeyPressed(java.awt.event.KeyEvent evt) {                                                 
-        // TODO add your handling code here:
+    private void txtCedulaClienteVentaKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCedulaClienteVentaKeyPressed
         if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
             if (!"".equals(txtCedulaClienteVenta.getText())) {
                 int idCliente = Integer.parseInt(txtCedulaClienteVenta.getText());
                 cl = client.BuscarCliente(idCliente);
-                if (cl.getNombre() != null){
-                txtNombreClienteVenta.setText(""+cl.getNombre());
-                txtTelefonoClienteVenta.setText(""+cl.getTelefono());
-                txtDireccionClienteVenta.setText(""+cl.getDireccion());
-                txtRazonClienteVenta.setText(""+cl.getId());
+                if (cl.getNombre() != null) {
+                    txtNombreClienteVenta.setText("" + cl.getNombre());
+                    txtTelefonoClienteVenta.setText("" + cl.getTelefono());
+                    txtDireccionClienteVenta.setText("" + cl.getDireccion());
+                    txtRazonClienteVenta.setText("" + cl.getId());
                 } else {
                     txtCedulaClienteVenta.setText("");
-                    JOptionPane.showMessageDialog(null,"Cliente no esta registrado");
+                    JOptionPane.showMessageDialog(null, "Cliente no esta registrado");
                 }
+            }
+        }
+    }//GEN-LAST:event_txtCedulaClienteVentaKeyPressed
+
+    private void txtIdVendedorKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtIdVendedorKeyPressed
+        // TODO add your handling code here:
+                if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
+            if (!"".equals(txtIdVendedor.getText())) {
+                int idVendedor = Integer.parseInt(txtIdVendedor.getText());
+               vr = vrdao.BuscarVendedor(idVendedor);
+               if (cl.getNombre() != null){
+               txtNombreVendedor.setText(""+vr.getNombre());
+//               txtTelefonoClienteVenta.setText(""+cl.getTelefono());
+//               txtDireccionClienteVenta.setText(""+cl.getDireccion());
+//               txtRazonClienteVenta.setText(""+cl.getId());
+               } else {
+                   txtIdVendedor.setText("");
+                   JOptionPane.showMessageDialog(null,"Vendedor no esta registrado");
+               }
         }
         }
-    } 
-    
+    }//GEN-LAST:event_txtIdVendedorKeyPressed
+
     
     
     
@@ -2045,7 +2082,6 @@ public class Proyecto extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane5;
     private javax.swing.JScrollPane jScrollPane6;
     private javax.swing.JTabbedPane jTabbedPane2;
-    private javax.swing.JTextField jTextField1;
     private javax.swing.JTextField jTextField15;
     private javax.swing.JTextField jTextField16;
     private javax.swing.JTextField jTextField17;
@@ -2084,6 +2120,7 @@ public class Proyecto extends javax.swing.JFrame {
     private javax.swing.JTextField txtIdNuevaVentaProducto;
     private javax.swing.JTextField txtIdProducto;
     private javax.swing.JTextField txtIdProveedor;
+    private javax.swing.JTextField txtIdVendedor;
     private javax.swing.JTextField txtIdVenta;
     private javax.swing.JTextField txtJornadaVendedor;
     private javax.swing.JTextField txtNitProveedor;
@@ -2147,8 +2184,16 @@ public class Proyecto extends javax.swing.JFrame {
         }
         lblTotalPagar.setText(String.format("%d", totalPagar));
     }
+   
+   private void limpiarVenta() {
+        txtCodigoVenta.setText("");
+        txtDescripcionVenta.setText("");
+        txtCantidadVenta.setText("");
+        txtPrecioVenta.setText("");
+        txtStockDisponible.setText("");
+        txtIdNuevaVentaProducto.setText("");
+    }
     
-
 
     private void RegistrarVenta() {
   

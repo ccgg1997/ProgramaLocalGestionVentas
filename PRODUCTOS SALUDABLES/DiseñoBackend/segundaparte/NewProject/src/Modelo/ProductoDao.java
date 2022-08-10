@@ -44,7 +44,7 @@ public class ProductoDao {
         }
     }
     
-    public void ConsultarProveedor(JComboBox proveedor) {
+     public void ConsultarProveedor(JComboBox proveedor) {
         String sql = "SELECT nombre FROM public.\"Proveedor\" ";
         try {
             con = cn.iniciarconexion();
@@ -73,8 +73,8 @@ public class ProductoDao {
                Producto pro = new Producto();
                pro.setId(rs.getInt("id"));
                pro.setNombre(rs.getString("nombre"));
-               pro.setProveedor(rs.getString("proveedor"));
                pro.setCantidad(rs.getInt("cantidad"));
+               pro.setProveedor(rs.getString("proveedor"));
                pro.setPrecio(rs.getInt("precio"));
                ListaPro.add(pro);
                //aux= rs.getString("nombre");
