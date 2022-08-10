@@ -14,17 +14,15 @@ public class Producto {
     private String nombre;
     private int precio;
     private int cantidad;
-    private String proveedor;
 
     public Producto() {
     }
 
-    public Producto(int id, String nombre, int cantidad, String proveedor, int precio) {
+    public Producto(int id, String nombre, int cantidad, int precio) {
         this.id = id;
         this.nombre = nombre;
         this.precio = precio;
         this.cantidad = cantidad;
-        this.proveedor = proveedor;
     }
 
     public int getId() {
@@ -43,14 +41,7 @@ public class Producto {
         this.nombre = nombre;
     }
 
-    public String getProveedor() {
-        return proveedor;
-    }
-
-    public void setProveedor(String proveedor) {
-        this.proveedor = proveedor;
-    }
-
+   
     public int getPrecio() {
         return precio;
     }

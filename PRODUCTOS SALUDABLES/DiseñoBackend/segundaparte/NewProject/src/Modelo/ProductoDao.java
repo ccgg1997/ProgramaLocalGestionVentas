@@ -11,8 +11,8 @@ import javax.swing.JOptionPane;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
-import javax.swing.JComboBox;
 /**
+
  *
  * @author Valeria
  */
@@ -25,15 +25,14 @@ public class ProductoDao {
     
     public boolean RegistrarProductos(Producto p) {
         
-        String sql = "INSERT INTO public.\"Producto\" (id,nombre,cantidad,proveedor,precio) VALUES (?,?,?,?,?)";
+        String sql = "INSERT INTO public.\"Producto\" (id,nombre,cantidad,precio) VALUES (?,?,?,?)";
         try {
             con = cn.iniciarconexion();
             ps = con.prepareStatement(sql);
             ps.setInt(1, p.getId());
             ps.setString(2, p.getNombre());
             ps.setInt(3, p.getCantidad());
-            ps.setString(4,p.getProveedor());
-            ps.setInt(5,p.getPrecio());
+            ps.setInt(4,p.getPrecio());
             ps.execute();
             return true;
 
@@ -44,19 +43,19 @@ public class ProductoDao {
         }
     }
     
-     public void ConsultarProveedor(JComboBox proveedor) {
-        String sql = "SELECT nombre FROM public.\"Proveedor\" ";
-        try {
-            con = cn.iniciarconexion();
-            ps = con.prepareStatement(sql);
-            rs = ps.executeQuery();
-            while (rs.next()) {
-                proveedor.addItem(rs.getString("nombre"));
-            }
-        } catch (SQLException e) {
-            System.out.println(e.toString());
-        }
-    }
+//     public void ConsultarProveedor(JComboBox proveedor) {
+//        String sql = "SELECT nombre FROM public.\"Proveedor\" ";
+//        try {
+//            con = cn.iniciarconexion();
+//            ps = con.prepareStatement(sql);
+//            rs = ps.executeQuery();
+//            while (rs.next()) {
+//                proveedor.addItem(rs.getString("nombre"));
+//            }
+//        } catch (SQLException e) {
+//            System.out.println(e.toString());
+//        }
+//    }
     
     public List listarProductos()
     {
@@ -74,7 +73,6 @@ public class ProductoDao {
                pro.setId(rs.getInt("id"));
                pro.setNombre(rs.getString("nombre"));
                pro.setCantidad(rs.getInt("cantidad"));
-               pro.setProveedor(rs.getString("proveedor"));
                pro.setPrecio(rs.getInt("precio"));
                ListaPro.add(pro);
                //aux= rs.getString("nombre");
@@ -117,15 +115,14 @@ public class ProductoDao {
     }
         
         public boolean ModificarProducto(Producto p){
-        String sql="UPDATE public.\"Producto\" SET nombre=?,precio=?,cantidad=?,proveedor=? WHERE id=?";
+        String sql="UPDATE public.\"Producto\" SET nombre=?,precio=?,cantidad=?, WHERE id=?";
         try{ 
             con= cn.iniciarconexion();
             ps=con.prepareStatement(sql);
             ps.setString(1,p.getNombre());
             ps.setInt(2, p.getPrecio());
             ps.setInt(3,p.getCantidad());
-            ps.setString(4, p.getProveedor());
-            ps.setInt(5, p.getId());
+            ps.setInt(4, p.getId());
             ps.execute();
             return true;
             
