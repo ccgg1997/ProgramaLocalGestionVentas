@@ -95,6 +95,43 @@ public class InsumoDao {
         return ListaC;
     }
     
+    
+    public List listarSimulacion(int simulacion)
+    {
+        List <Insumo> ListaC= new ArrayList();
+        String sql=" SELECT * FROM public.\"InventarioInsumos\" ";
+        String aux="";
+       
+        try
+        {
+            con= cn.iniciarconexion();
+            ps=con.prepareStatement(sql);
+            rs = ps.executeQuery();
+
+            while (rs.next()) {
+                Insumo in = new Insumo();
+                in.setCodigo(rs.getInt("codigo"));
+                in.setNit_proveedor(rs.getInt("nit_proveedor"));
+                in.setNombre_insumo(rs.getString("nombre_insumo"));
+                in.setCantidad_insumo(rs.getInt("cantidad_insumo"));
+                in.setPrecio(rs.getInt("precio"));
+                ListaC.add(in);
+                //aux= rs.getString("nombre");
+            }
+            //PRUEBA PARA VERIFICAR LA CONEXION CON LA BASE DE DATOS
+            //JOptionPane.showMessageDialog(null,aux);
+        } catch (SQLException e) {
+            System.out.println(e.toString());
+
+        }
+        return ListaC;
+    }
+    
+    
+    
+    
+    
+    
      public boolean eliminarInsumo(int codigo)
     {
         String sql= "DELETE FROM public.\"InventarioInsumos\" WHERE codigo=?";

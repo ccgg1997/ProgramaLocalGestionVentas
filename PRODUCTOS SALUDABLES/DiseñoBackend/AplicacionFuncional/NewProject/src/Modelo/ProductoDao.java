@@ -10,6 +10,7 @@ import java.sql.SQLException;
 import javax.swing.JOptionPane;
 import java.sql.ResultSet;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 /**
 
@@ -89,7 +90,8 @@ public class ProductoDao {
         return ListaPro;
     }
     
-        public boolean eliminarProducto(int id)
+    
+    public boolean eliminarProducto(int id)
     {
         String sql= "DELETE FROM public.\"Producto\" WHERE id=?";
         try{
@@ -130,22 +132,19 @@ public class ProductoDao {
         }
         catch(SQLException e){
             JOptionPane.showMessageDialog(null, e.toString());
-            return false;
-        
+            return false;        
         }finally{
             try{
-                con.close();
-                
+                con.close();               
             }
             catch(SQLException ex){
                 JOptionPane.showMessageDialog(null, "Código :" + ex.getErrorCode()
                         + "\n " + ex.getMessage());
-            }
-            
+            }            
         }
         
     }
-
+    
     public Producto BuscarProducto(int id) {
         Producto producto = new Producto();
         String sql = "SELECT * FROM public.\"Producto\" WHERE id = ?";
@@ -159,98 +158,179 @@ public class ProductoDao {
                 producto.setNombre(rs.getString("nombre"));
                 producto.setPrecio(rs.getInt("precio"));
                 producto.setCantidad(rs.getInt("cantidad"));
-
             }
-
         } catch (SQLException e) {
             System.out.println(e.toString());
-
         }
         return producto;
     }
-    
-    public void BuscarInsumoParaProducirProducto(int id ,int cantidad) {
-        //Producto producto = new Producto();
-        String sql = "SELECT * FROM public.\"InsumosParaproducir1Producto\" WHERE id_producto = ?";
-        try {
-            con = cn.iniciarconexion();
-            ps = con.prepareStatement(sql);
-            ps.setInt(1, id);
-            rs = ps.executeQuery();
-            if (rs.next()) {
-
-                int harina= rs.getInt("harina")*cantidad;
-                int carne=(rs.getInt("carne"))*cantidad;
-                int pollo=(rs.getInt("pollo"))*cantidad;
-                int huevos=(rs.getInt("huevos"))*cantidad;
-                int sal=(rs.getInt("sal"))*cantidad;
-                int levadura=(rs.getInt("levadura"))*cantidad;
-                int aceite=(rs.getInt("aceite"))*cantidad;
-                int papa=(rs.getInt("papa"))*cantidad;
-                int queso=(rs.getInt("queso"))*cantidad;
-                ModificarInsumo(1,harina);
-                ModificarInsumo(2,carne);
-                ModificarInsumo(3,pollo);
-                ModificarInsumo(4,huevos);
-                ModificarInsumo(5,sal);
-                ModificarInsumo(6,levadura);
-                ModificarInsumo(7,aceite);
-                ModificarInsumo(8,papa);
-                ModificarInsumo(9,queso);
-
-            }
-
-        } catch (SQLException e) {
-            System.out.println(e.toString());
-
-        }
-        //return producto;
-    }
-    
-     public boolean ModificarInsumo(int codigo,int cantidad){
-        String sql="UPDATE public.\"InventarioInsumos\" SET  cantidad_insumo=?, WHERE codigo=?";
-        try{ 
+        
+        
+    public boolean AumentarInventarioProducto(int id,int cantidadProducida){
+        String sql="UPDATE public.\"Producto\" SET cantidad=? WHERE id=?";
+        try{
+            int cantidad=cantidadProducida+inventarioProducto(id);
+            //JOptionPane.showMessageDialog(null,  cantidad);
             con= cn.iniciarconexion();
-            ps=con.prepareStatement(sql);
-            int existencias=buscarInsumo(codigo);
-            ps.setInt(1,existencias-cantidad);
-            ps.setInt(2, codigo);
-         
-            JOptionPane.showMessageDialog(null, "Insumo modificado");
+            ps=con.prepareStatement(sql); 
+            ps.setInt(1,cantidad);
+            ps.setInt(2,id);
             ps.execute();
-            
-            
             return true;
         }
         catch(SQLException e){
             JOptionPane.showMessageDialog(null, e.toString());
             return false;
-        
         }finally{
             try{
                 con.close();
-                
             }
             catch(SQLException ex){
                 JOptionPane.showMessageDialog(null, "Código :" + ex.getErrorCode()
                         + "\n " + ex.getMessage());
+            } 
+        } 
+    }
+        
+        
+        
+
+    public int inventarioProducto(int idProducto) {
+        int producto=0;
+        String sql = "SELECT * FROM public.\"Producto\" WHERE id = ?";
+        try {
+            con = cn.iniciarconexion();
+            ps = con.prepareStatement(sql);
+            ps.setInt(1, idProducto);
+            rs = ps.executeQuery();
+            if (rs.next()) {
+                producto=(rs.getInt("cantidad"));
             }
-            
+        } catch (SQLException e) {
+            System.out.println(e.toString());
         }
+        return producto;
+    }
+    
+    
+    public void BuscarInsumoParaProducirProducto(int id ,int cantidad) {
+        //Producto producto = new Producto();
+        String sql = "SELECT * FROM public.\"InsumosParaproducir1Producto\" WHERE id_producto = ?";
+        
+        try {
+            int harina=0;
+            int carne=0;
+            int pollo=0;
+            int huevos=0;
+            int sal=0;
+            int levadura=0;
+            int aceite=0;
+            int papa=0;
+            int queso=0;
+            boolean invSuficient=true;
+            con = cn.iniciarconexion();
+            ps = con.prepareStatement(sql);
+            ps.setInt(1, id);
+            rs = ps.executeQuery();
+           
+
+            if (rs.next()) {
+            
+                harina= rs.getInt("harina")*cantidad;
+                carne=(rs.getInt("carne"))*cantidad;
+                pollo=(rs.getInt("pollo"))*cantidad;
+                huevos=(rs.getInt("huevos"))*cantidad;
+                sal=(rs.getInt("sal"))*cantidad;
+                levadura=(rs.getInt("levadura"))*cantidad;
+                aceite=(rs.getInt("aceite"))*cantidad;
+                papa=(rs.getInt("papa"))*cantidad;
+                queso=(rs.getInt("queso"))*cantidad;
+                
+                
+                for (int i=1;i<10;i++) {
+                  if(invSuficient)
+                  {
+                      invSuficient=inventarioSuficiente(i,cantidad);
+                  }
+                  else{
+                      break;
+                  }
+                    
+                }
+                
+                if(invSuficient)
+                {
+                    ModificarInsumo(1,harina,"harina");
+                    ModificarInsumo(2,carne,"carne");
+                    ModificarInsumo(3,pollo,"pollo");
+                    ModificarInsumo(4,huevos,"huevos");
+                    ModificarInsumo(5,sal,"sal");
+                    ModificarInsumo(6,levadura,"levadura");
+                    ModificarInsumo(7,aceite,"aceite");
+                    ModificarInsumo(8,papa,"papa");
+                    ModificarInsumo(9,queso,"queso");
+                    AumentarInventarioProducto(id,cantidad);
+                 }
+                else{
+                    JOptionPane.showMessageDialog(null, "insumos insuficientes");
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println(e.toString());
+        }
+    }
+    
+    
+    public boolean inventarioSuficiente(int codigo,int cantidad){
+            int existencias= buscarInsumo(codigo)-cantidad;
+            return existencias>0;
+    }
+    
+    
+    
+     public boolean ModificarInsumo(int codigo,int cantidad, String nombre){
+        String sql = "UPDATE public.\"InventarioInsumos\" SET cantidad_insumo=? "
+                + "WHERE codigo=?";
+        //int inventarioPoducto;
+       
+        try{
+            int existencias= buscarInsumo(codigo)-cantidad;
+            con= cn.iniciarconexion();
+            ps=con.prepareStatement(sql);
+            ps.setInt(1,existencias);
+            ps.setInt(2,codigo);
+            ps.execute();
+            //JOptionPane.showMessageDialog(null, "Insumo modificado");
+            return true;
+        }
+        catch(SQLException e){
+            JOptionPane.showMessageDialog(null, e.toString());
+            return false;
+        }finally{
+            try{
+                con.close();   
+            }
+            catch(SQLException ex){
+                JOptionPane.showMessageDialog(null, "Código :" + ex.getErrorCode()
+                        + "\n " + ex.getMessage());
+                return false;
+            }
+        }
+        
         
     }
     
-    public int buscarInsumo(int codigo){
-        
-        String sql="SELECT *  FROM  public.\"InventarioInsumos\", WHERE codigo=?";
-        int existencias;
-        try{ 
+    public int buscarInsumo(int codigo){     
+        String sql="SELECT cantidad_insumo FROM  public.\"InventarioInsumos\" WHERE codigo= ? ";
+        try{         
+            int existencias=0;
             con= cn.iniciarconexion();
             ps=con.prepareStatement(sql);
-            existencias= rs.getInt("get_cantidad");
-
-            JOptionPane.showMessageDialog(null, "Insumo modificado");
-            ps.execute();
+            ps.setInt(1, codigo);
+            rs= ps.executeQuery();
+            while (rs.next()){
+                existencias= rs.getInt("cantidad_insumo");  
+            }       
             return existencias;
         }
         catch(SQLException e){
